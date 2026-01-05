@@ -1,0 +1,87 @@
+---
+title: "Caracterización según apoyo a la democracia"
+author: "Juan Araya y Sofía Cisternas"
+date: "`r format(Sys.Date())`"
+lang: es
+execute:
+  echo: TRUE
+  message: FALSE
+  warning: FALSE
+format:
+  html:
+    theme:
+      light: cosmo
+      dark: darkly
+    toc: TRUE
+    toc-depth: 3
+    number-sections: TRUE
+    code-fold: TRUE
+    code-copy: TRUE
+    code-tools: TRUE
+    smooth-scroll: TRUE
+---
+```{r}
+rm(list = ls())
+library(readxl)
+```
+
+```{r}
+library(rio)
+
+latinobarometro <- import("Latinobarometro_2024_Excel_esp_v20250817.xlsx")
+```
+
+
+# Problematización
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+# Pregunta de análisis
+
+# Objetivos
+
+## Objetivo general
+
+## Objetivos específicos
+
+# Fuente de datos y variables a utilizar
+
+
+
+```{r}
+
+latinobarometro <- read_excel()
+```
+
+
+# Análisis descriptivo
+
+# Análisis exploratorio
+
+
+```{r}
+#| label: Setup
+#| include: FALSE
+rm(list = ls())
+
+library(dplyr)
+library(ggplot2)
+library(rio)
+library(skimr)
+library(tidyr)
+library(haven)
+```
+
+```{r}
+```
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
