@@ -41,7 +41,7 @@ library(stringr)
 El Instituto Internacional para la Democracia y la Asistencia Electoral (IDEA Internacional) evalúa el desempeño democrático de 173 países a lo largo de los años por medio de la medición de diversos indicadores ligados al Estado de Derecho, la representación, participación y a los derechos humanos. Dichos indicadores se categorizan y contemplan los siguientes factores (IDEA Internacional, 2025):
 
 ```{r}
-https://raw.githubusercontent.com/usuario/repositorio/main/img/imagen.png
+https://raw.https://github.com/sofiacisternas/Capstone/blob/main/Indicadores%20IDEA.png
 ![Mapa del área de estudio](https://raw.https://github.com/sofiacisternas/Capstone/blob/main/Indicadores%20IDEA.png) 
 ```
 Los indicadores provienen de 22 fuentes de datos diferentes y se analizan en conjunto con datos cualitativos centrados en eventos sobre el desarrollo de la democracia en los países analizados (IDEA Internacional, 2025).
