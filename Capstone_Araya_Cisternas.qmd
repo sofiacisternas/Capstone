@@ -1,5 +1,5 @@
 ---
-title: "Caracterización según apoyo a la democracia"
+title: "Caracterización de las personas según su nivel de apoyo a la democracia"
 author: "Juan Araya y Sofía Cisternas"
 date: "`r format(Sys.Date())`"
 lang: es
@@ -38,21 +38,35 @@ library(stringr)
 
 # Problematización
 
+El Instituto Internacional para la Democracia y la Asistencia Electoral (IDEA Internacional) evalúa el desempeño democrático de 173 países a lo largo de los años por medio de la medición de diversos indicadores ligados al Estado de Derecho, la representación, participación y a los derechos humanos. Dichos indicadores se categorizan y contemplan los siguientes factores (IDEA Internacional, 2025):
 
+```{r}
+https://raw.https://github.com/sofiacisternas/Capstone/blob/main/Indicadores%20IDEA.png
+![Mapa del área de estudio](https://raw.https://github.com/sofiacisternas/Capstone/blob/main/Indicadores%20IDEA.png) 
+```
+Los indicadores provienen de 22 fuentes de datos diferentes y se analizan en conjunto con datos cualitativos centrados en eventos sobre el desarrollo de la democracia en los países analizados (IDEA Internacional, 2025).
+
+Con base a dichos datos, IDEA Internacional elabora un informe denominado como “El Estado Global de la Democracia”, en el cual se concentra el análisis efectuado y se emiten conclusiones a partir de los avances o retrocesos en indicadores fundamentales para el desarrollo democrático. En la última versión publicada, correspondiendo a las mediciones ejecutadas durante 2024, se evidenció que 54% (94) de los países han sufrido un deterioro en al menos uno de los factores en comparación con su desempeño hace cinco años. Contrariamente, solo el 32% (55) demostró avances en al menos uno de los factores en el mismo periodo (IDEA Internacional, 2025).
+
+Asimismo, las tendencias globales han demostrado que las libertades civiles fueron uno de los factores que más deterioro experimentó, impactando aspectos como la libertad de prensa, libertad de expresión, igualdad económica y acceso a la justicia. Sin embargo, se observaron avances los indicadores relacionados con la ausencia de corrupción, acceso a la justicia y elecciones creíbles (IDEA Internacional, 2025).
+
+Chile, por su parte, se caracteriza por tener un alto desempeño en las cuatro categorías analizadas, pero especialmente en materia de Representación (0,88/1) y Estado de Derecho (0,73/1). En este sentido, el país está dentro del 25% de los países con mejor desempeño a nivel global, demostrando avances significativos en integridad y seguridad personal, libertades civiles y acceso a la justicia (IDEA Internacional, s.f.).
+
+A pesar del estable posicionamiento del país en materia democrática, se ha evidenciado una baja confianza de la ciudadanía hacia las instituciones políticas y de representación. La Encuesta CEP n°95, correspondiente a septiembre-octubre 2025, los partidos políticos y el Congreso Nacional son las instituciones evaluadas con menor nivel de confianza, alcanzando una puntuación de solo el 3% y 8% respectivamente. Similarmente, la encuesta evidencia que un 61% de las personas considera que la situación política en Chile está mala o muy mala, en contrate con el 10% que opina que está buena o muy buena. Sin embargo, solo un 19% opina que la democracia en el país funciona mal o muy mal (Encuesta CEP N°95, 2025).
+
+Por tanto, se vuele relevante analizar cómo se caracterizan las personas según su nivel de apoyo a la democracia según factores sociodemográficos, niveles de participación política y percepciones ciudadanas e institucionales. Debido a que, algunos académicos han argumentado que el apoyo de la ciudadanía hacia la democracia se mide en gran parte por la capacidad de “delivery” de este tipo de régimen, es decir, por la capacidad de las instituciones de generar resultados concretos en la vida de las personas (Escudero, 2025). Asimismo, se ha señalado que la desafección ciudadana funciona como una antesala al autoritarismo, donde dicha desafección tiende a manifestarse cuando las personas sienten que el régimen democrático no resuelve sus necesidades básicas ni garantiza sus derechos (Leibe, 2025).
 
 # Pregunta de análisis
 
-Debido a la caracterización antes mencionada, es que surge la siguiente pregunta de investigación: ¿De qué manera se puede predecir el apoyo a la democracia de las personas en Chile analizando sus características personales, generacionales y territoriales de participación política mediante un modelo de Random forest?
-
+Considerando el contexto global de deterioro democrático y la combinación en Chile de altos niveles de desempeño democrático con bajos niveles de confianza institucional, surge la siguiente pregunta de investigación: ¿De qué manera las características sociodemográficas, los niveles de participación política y las percepciones ciudadanas e institucionales ayudan a predecir el nivel de apoyo a la democracia de las personas en Chile mediante un modelo de Random Forest?
 
 # Objetivo general del proyecto
 
-Identificar y analizar las diferentes características personales, generacionales y territoriales de participación política que permiten clasificar a las personas de acuerdo con su nivel de apoyo a la democracia (alto, medio, bajo) utilizando variables de participación política, actitudes cívicas y características sociodemográficas mediante un modelo de Random Forest.
-
+Identificar y analizar las diferentes características personales que permiten clasificar a las personas de acuerdo con su nivel de apoyo a la democracia (alto, medio, bajo) utilizando variables de participación política, percepciones cívicas e institucionales y características sociodemográficas mediante un modelo de Random Forest para evaluar su capacidad predictiva y la importancia relativa de cada variable por utilizar.
 
 # Fuente de datos y variables a utilizar
 
-Encuesta Latinobarómetro 2024 - Base de datos Chile
+A fin de caracterizar a las personas según su nivel de apoyo a la democracia, se utilziará el estudio de opinión pública desarrollado por Latinobarómetro en su versión correspondiente al año 2024, específicamente la base de datos que únicamente contiene la información de Chile.
 
 ```{r}
 #| label: Cargar base de datos
@@ -97,13 +111,18 @@ base <- limpieza %>%
     P38STGBS,
     P39STGBS.A,
     P44ST,
+    P36STGBS,
     
-    # Actitudes cívicas / institucionales
+    # Percepciones cívicas / institucionales
     P2ST,
     P6STGBS,
-    starts_with("P14STGBS"),  # Confianza en instituciones A-N
+    starts_with("P14STGBS"),
     P15STGBS,
     starts_with("P3NOIJ"),
+    P17ST,
+    P25ST,
+    P51ST,
+    P54N,
     
     # Sociodemográficas
     P16ST,
@@ -113,7 +132,11 @@ base <- limpieza %>%
     S16,
     EDAD,
     SEXO,
+<<<<<<< HEAD
     REG
+=======
+    REGION
+>>>>>>> 4a60dfc71405cb5a044598d8f786e1d12dec6702
   )
 ```
 
@@ -288,16 +311,41 @@ skim(base)
 
 ## Variables del modelo
 
-### Variable dependiente:
+Con el propósito de medir el nivel de apoyo a la democracia, la participación política, las percpeciones cívicas e institucionales y las características sociodemográficas de las personas, se utilizaran las variables descritas a continuación:
 
-- P11STGBS ¿Con cuál de las siguientes frases está Ud. más de acuerdo?
+### Variable dependiente
+P11STGBS. "¿Con cuál de las siguientes frases está Ud. más de acuerdo?" (La democracia es preferible a cualquier otra forma de gobierno = 1, En algunas circunstancias, un gobierno autoritario puede ser preferible a uno democrático = 2, A la gente como uno le da lo mismo un régimen democrático que uno no democrático = 3)
 
-### Variables independientes:
+### Variables independientes
+#### Participación política
+- P26ST. "¿Cuál frase está más cerca de su manera de pensar?" (La manera como uno vota puede hacer que las cosas sean diferentes en el futuro = 1, No importa cómo uno vote, no hará que las cosas sean mejor en el futuro = 2)
+- P38STGBS. "¿Hay algún partido político hacia el cual se sienta usted más cercano que hacia el resto de los partidos?" (Sí = 1, No = 2)
+- P39STGBS.A "Si este domingo hubiera elecciones, ¿por cuál partido político votaría Ud.?" (Respuesta abierta)
+- P44ST. "¿Dónde suele Ud. expresar sus opiniones sobre los problemas del país o Ud. no suele hacerlo?" (Manifestación/protesta = 1, Redes sociales = 2, Entre amigos = 3, En familia = 4, No suelo hacerlo = 5)
+- P36STGBS. "¿Cuán interesado está Ud. en la política?" (Muy interesado = 1, Algo interesado = 2, Poco interesado = 3, Nada interesado = 4)
 
-#### Participación política:
+#### Percepciones cívicas / institucionales
+- P2ST. "¿Diría Ud. que este país...?" (Está progresando = 1, Está estancado = 2, Está en retroceso = 3)
+- P6STGBS. "¿Cómo calificaría en general la situación económica actual del país?" (Muy buena = 1, Buena = 2, Regular = 3, Mala = 4, Muy mala = 5)
+- P14STGBS A–N. "¿Cuánta confianza tiene usted en las siguientes instituciones?" (Mucha confianza = 1, Algo de confianza = 2, Poca confianza = 3, Ninguna confianza = 4) (Fuerzas Armadas, Policía/Carabineros, Iglesia, Congreso/Parlamento, Gobierno, Poder Judicial, Partidos políticos, Institución electoral del país, Presidente, Radio, Televisión, Redes sociales, Diarios, Sindicatos)
+- P15STGBS. "¿Ud. aprueba o no aprueba la gestión del gobierno que encabeza el presidente?" (Aprueba = 1, No aprueba = 2)
+- P3NOIJ. "¿Podría usted indicar a quiénes no le gustaría tener como vecinos?" (Personas de una raza o etnia distinta = 1, Inmigrantes o trabajadores extranjeros = 2, Homosexuales = 3, Personas de una religión distinta = 4, Bebedores, drogadictos o alcohólicos = 5, Parejas que viven juntas sin estar casadas = 6, Personas que hablan un idioma distinto = 7, Jóvenes = 8)
+- P54N. "En una escala donde 00 es para nada corrupto y 10 totalmente corrupto, ¿cuán corrupto cree Ud. que es el país?" (Escala 00–10)
+- P51ST. "¿Con qué frecuencia se preocupa Ud. de que pueda llegar a ser víctima de un delito con violencia?" (Todo o casi todo el tiempo = 1, Algunas veces = 2, Ocasionalmente = 3, Nunca = 4)
+- P25ST. "¿Usted se siente políticamente representado en el parlamento/congreso?" (Sí = 1, No = 2)
+- P17ST. "¿Cuán justa cree Ud. que es la distribución del ingreso en el país?" (Muy justa = 1, Justa = 2, Injusta = 3, Muy injusta = 4)
 
-- P26ST. ¿Cuál frase está más cerca de su manera de pensar?
+#### Sociodemográficas
+- P16ST. "En una escala donde 00 es izquierda y 10 es derecha, ¿dónde se ubicaría Ud.?" (Escala 00–10)
+- S1. "¿Cuál es su religión?" (Respuesta abierta)
+- S2. "¿Ud. se describiría como perteneciendo a la clase...? (Alta = 1, Media alta = 2, Media = 3, Media baja = 4, Baja = 5)
+- S6. "¿Usted o algún familiar cercano recibe algún beneficio o apoyo del gobierno?" (Sí, usted = 1, Sí, un familiar = 2, Sí, ambos = 3)
+- S16. "¿Es Ud. ciudadano (nacionalidad del país)?" (Sí = 1, No = 2)
+- "Región"
+- "Edad"
+- "Sexo"
 
+<<<<<<< HEAD
 - P38STGBS. ¿Hay algún partido político hacia el cual se sienta usted más cercano que hacia el resto de los partidos?
 
 - P39STGBS.A Si este domingo hubiera elecciones, ¿Por cuál partido político votaría Ud.?
@@ -347,28 +395,48 @@ skim(base)
 - Sexo
 
 
-
-
-# Análisis descriptivo
-
+=======
+# Análisis exploartorio y descriptivo
+En primer lugar, para poder analizar las variables y su distribución, es necesario realizar una serie de modificaciones, a fin de facilitar el tratamiento de los datos y de interpretación de resultados.
+## Observación inicial de base filtrada
 ```{r}
-str(latinobarometro)
+#| label: Primera visualización base final
+#| include: FALSE
 
-head(latinobarometro)
+str(base)
 
-summary(latinobarometro)
+head(base)
 
-glimpse(latinobarometro)
+summary(base)
 
-skim(latinobarometro)
+glimpse(base)
+
+skim(base)
+```
+## Modificación de variables
+```{r}
+#| label: Recodificación
+
+base <- base %>%
+mutate()
+EDAD, P11STGBS, S1, P39STGBS
 ```
 
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
-
-You can add options to executable code like this
-
 ```{r}
+#| label: Tratamiento NA y valores perdidos
+ REVISAR EL CASO A CASO, los valores perdidos pueden ser: 0, 8, 97, 99 (ver si hay otro)
 
 ```
+>>>>>>> 4a60dfc71405cb5a044598d8f786e1d12dec6702
 
-The `echo: false` option disables the printing of code (only output is displayed).
+
+# Random Forest
+
+
+
+# Referencias
+
+- Centro de Estudio Públicos. (2025).  Encuesta CEP N°95, Septiembre - Octubre 2025. https://static.cepchile.cl/uploads/cepchile/2025/10/13-113839_vwlh_ppt95_conferencia_OP_con-anexo_VF_29102025.pdf
+- IDEA Internacional. (s.f.). Chile. https://www.idea.int/democracytracker/country/chile 
+- IDEA Internacional. (2025). The Global State of Democracy 2025: Democracy on the Move. https://www.idea.int/publications/catalogue/global-state-of-democracy-2025-democracy-on-the-move?lang=en
+- Universidad de Chile. (2025). Los ejes del debate sobre la democracia: Deterioro global y crisis del “delivery”. https://gobierno.uchile.cl/noticias/233404/los-ejes-del-debate-sobre-la-democracia-deterioro-global-y-crisis
