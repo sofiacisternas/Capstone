@@ -20,6 +20,7 @@ format:
     code-tools: TRUE
     smooth-scroll: TRUE
 ---
+
 ```{r}
 #| label: Setup
 #| include: FALSE
@@ -37,13 +38,12 @@ library(stringr)
 
 # Problematización
 
-Problema Según el informe “El estado global de la democracia” de IDEA Internacional, en 2024 el 54% de los países han sufrido un deterioro en al menos un indicador clave de desempeño democrático. AGREGAR SOBRE CHILE → SOFI
 
-En este contexto, se vuelve relevante identificar y analizar las características de la ciudadanía con respecto a sus características personales, generacionales y territoriales con la finalidad de predecir su apoyo a la democracia.
 
 # Pregunta de análisis
 
 Debido a la caracterización antes mencionada, es que surge la siguiente pregunta de investigación: ¿De qué manera se puede predecir el apoyo a la democracia de las personas en Chile analizando sus características personales, generacionales y territoriales de participación política mediante un modelo de Random forest?
+
 
 # Objetivo general del proyecto
 
@@ -51,6 +51,8 @@ Identificar y analizar las diferentes características personales, generacionale
 
 
 # Fuente de datos y variables a utilizar
+
+Encuesta Latinobarómetro 2024 - Base de datos Chile
 
 ```{r}
 #| label: Cargar base de datos
@@ -108,86 +110,71 @@ base <- limpieza %>%
   )
 ```
 
+
 ## Variables del modelo
 
-Variable dependiente:
+### Variable dependiente:
 
--   `P11STGBS` ¿Con cuál de las siguientes frases está Ud. más de acuerdo?
+- P11STGBS ¿Con cuál de las siguientes frases está Ud. más de acuerdo?
 
-Variables independientes:
+### Variables independientes:
 
-Participación política:
+#### Participación política:
 
--   `P26ST.` ¿Cuál frase está más cerca de su manera de pensar?
+- P26ST. ¿Cuál frase está más cerca de su manera de pensar?
 
--   `P38STGBS.` ¿Hay algún partido político hacia el cual se sienta usted más cercano que hacia el resto de los partidos?
+- P38STGBS. ¿Hay algún partido político hacia el cual se sienta usted más cercano que hacia el resto de los partidos?
 
--   `P39STGBS.A` Si este domingo hubiera elecciones, ¿Por cuál partido político votaría Ud.?
+- P39STGBS.A Si este domingo hubiera elecciones, ¿Por cuál partido político votaría Ud.?
 
--   `P44ST.` ¿Dónde suele Ud expresar sus opiniones sobre los problemas del país o Ud no suele hacerlo?
+- P44ST. ¿Dónde suele Ud expresar sus opiniones sobre los problemas del país o Ud no suele hacerlo?
 
-Actitudes cívicas / institucionales:
+#### Actitudes cívicas / institucionales:
 
--   `P2ST.` ¿Diría Ud. que este país...?
+- P2ST. ¿Diría Ud. que este país...?
 
--   `P6STGBS.` ¿Cómo calificaría en general la situación económica actual del país? Diría Ud. que es...?
+- P6STGBS. ¿Cómo calificaría en general la situación económica actual del país? Diría Ud. que es...?
 
--   `P14STGBS A-N.` ¿cuánta confianza tiene usted en ellas: mucha (1), algo (2), poca (3) o ninguna confianza(4) en…?
+- P14STGBS A-N. ¿cuánta confianza tiene usted en ellas: mucha (1), algo (2), poca (3) o ninguna confianza(4) en…?
+1. Las Fuerzas Armadas
+2. La policía/Carabineros
+3. La Iglesia
+4. Congreso/Parlamento
+5. Gobierno
+6. Poder Judicial
+7. Los partidos políticos
+8. La institución Electoral del país
+9. El presidente
+10. Radio
+11. Televisión
+12. Redes sociales
+13. Diarios
+14. Sindicatos
 
-    1.  Las Fuerzas Armadas
+- P15STGBS. ¿Ud. aprueba o no aprueba la gestión del gobierno que encabeza el presidente (nombre)?
 
-    2.  La policía/Carabineros
+- P3NOIJ. ¿Podría usted indicar aquéllos que no le gustaría tener de vecinos?
 
-    3.  La Iglesia
+#### Sociodemográficas:
 
-    4.  Congreso/Parlamento
+- P16ST. En una escala dónde “00" es la “izquierda” y “10" la “derecha”, ¿Dónde se ubicaría Ud.?
 
-    5.  Gobierno
+- S1. ¿Cuál es su religión?
 
-    6.  Poder Judicial
+- S2. ¿Ud. se describiría como perteneciendo a la clase...?
 
-    7.  Los partidos políticos
+- S6. Usted o algún familiar cercano recibe algún beneficio o apoyo del gobierno de su país?
 
-    8.  (La institución Electoral del país)
+- S16. ¿Es Ud. ciudadano (NACIONALIDAD)?
 
-    9.  El presidente
+- Edad
 
-    10. Radio
+- Sexo
 
-    11. Televisión
-
-    12. Redes sociales
-
-    13. Diarios
-
-    14. Sindicatos
-
--   `P15STGBS.` ¿Ud. aprueba o no aprueba la gestión del gobierno que encabeza el presidente (nombre)?
-
--   `P3NOIJ.` ¿Podría usted indicar aquéllos que no le gustaría tener de vecinos?
-
-Sociodemográficas:
-
--   `P16ST.` En una escala dónde “00" es la “izquierda” y “10" la “derecha”, ¿Dónde se ubicaría Ud.?
-
--   `S1.` ¿Cuál es su religión?
-
--   `S2.` ¿Ud. se describiría como perteneciendo a la clase...?
-
--   `S6.` Usted o algún familiar cercano recibe algún beneficio o apoyo del gobierno de su país?
-
--   `S16.` ¿Es Ud. ciudadano (NACIONALIDAD)?
-
--   `Edad`
-
--   `Sexo`
-
-# Análisis descriptivo
 
 # Análisis exploratorio
-
-
 ```{r}
+
 str(latinobarometro)
 
 head(latinobarometro)
@@ -199,7 +186,19 @@ glimpse(latinobarometro)
 skim(latinobarometro)
 ```
 
+
+# Análisis descriptivo
+
 ```{r}
+str(latinobarometro)
+
+head(latinobarometro)
+
+summary(latinobarometro)
+
+glimpse(latinobarometro)
+
+skim(latinobarometro)
 ```
 
 When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
