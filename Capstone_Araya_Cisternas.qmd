@@ -20,6 +20,7 @@ format:
     code-tools: TRUE
     smooth-scroll: TRUE
 ---
+
 ```{r}
 rm(list = ls())
 library(readxl)
@@ -29,35 +30,129 @@ library(readxl)
 library(rio)
 
 latinobarometro <- import("Latinobarometro_2024_Excel_esp_v20250817.xlsx")
+
+
 ```
 
+# 1 Problematización
 
-# Problematización
+Problema Según el informe “El estado global de la democracia” de IDEA Internacional, en 2024 el 54% de los países han sufrido un deterioro en al menos un indicador clave de desempeño democrático. AGREGAR SOBRE CHILE → SOFI
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+En este contexto, se vuelve relevante identificar y analizar las características de la ciudadanía con respecto a sus características personales, generacionales y territoriales con la finalidad de predecir su apoyo a la democracia.
 
-# Pregunta de análisis
+# 2 Pregunta de análisis
 
-# Objetivos
+Debido a la caracterización antes mencionada, es que surge la siguiente pregunta de investigación: ¿De qué manera se puede predecir el apoyo a la democracia de las personas en Chile analizando sus características personales, generacionales y territoriales de participación política mediante un modelo de Random forest?
 
-## Objetivo general
+# 3 Objetivo
 
-## Objetivos específicos
+Identificar y analizar las diferentes características personales, generacionales y territoriales de participación política que permiten clasificar a las personas de acuerdo con su nivel de apoyo a la democracia (alto, medio, bajo) utilizando variables de participación política, actitudes cívicas y características sociodemográficas mediante un modelo de Random Forest.
 
-# Fuente de datos y variables a utilizar
+# 4 Fuente de datos y variables a utilizar
 
-
+Encuesta Latinobarómetro 2024 - Base de datos Chile
 
 ```{r}
 
 latinobarometro <- read_excel()
 ```
 
+# Metodología
 
-# Análisis descriptivo
+## Variables del modelo
+
+Variable dependiente:
+
+-   `P11STGBS` ¿Con cuál de las siguientes frases está Ud. más de acuerdo?
+
+Variables independientes:
+
+Participación política:
+
+-   `P26ST.` ¿Cuál frase está más cerca de su manera de pensar?
+
+-   `P38STGBS.` ¿Hay algún partido político hacia el cual se sienta usted más cercano que hacia el resto de los partidos?
+
+-   `P39STGBS.A` Si este domingo hubiera elecciones, ¿Por cuál partido político votaría Ud.?
+
+-   `P44ST.` ¿Dónde suele Ud expresar sus opiniones sobre los problemas del país o Ud no suele hacerlo?
+
+Actitudes cívicas / institucionales:
+
+-   `P2ST.` ¿Diría Ud. que este país...?
+
+-   `P6STGBS.` ¿Cómo calificaría en general la situación económica actual del país? Diría Ud. que es...?
+
+-   `P14STGBS A-N.` ¿cuánta confianza tiene usted en ellas: mucha (1), algo (2), poca (3) o ninguna confianza(4) en…?
+
+    1.  Las Fuerzas Armadas
+
+    2.  La policía/Carabineros
+
+    3.  La Iglesia
+
+    4.  Congreso/Parlamento
+
+    5.  Gobierno
+
+    6.  Poder Judicial
+
+    7.  Los partidos políticos
+
+    8.  (La institución Electoral del país)
+
+    9.  El presidente
+
+    10. Radio
+
+    11. Televisión
+
+    12. Redes sociales
+
+    13. Diarios
+
+    14. Sindicatos
+
+-   `P15STGBS.` ¿Ud. aprueba o no aprueba la gestión del gobierno que encabeza el presidente (nombre)?
+
+-   `P3NOIJ.` ¿Podría usted indicar aquéllos que no le gustaría tener de vecinos?
+
+Sociodemográficas:
+
+-   `P16ST.` En una escala dónde “00" es la “izquierda” y “10" la “derecha”, ¿Dónde se ubicaría Ud.?
+
+-   `S1.` ¿Cuál es su religión?
+
+-   `S2.` ¿Ud. se describiría como perteneciendo a la clase...?
+
+-   `S6.` Usted o algún familiar cercano recibe algún beneficio o apoyo del gobierno de su país?
+
+-   `S16.` ¿Es Ud. ciudadano (NACIONALIDAD)?
+
+-   `Región`
+
+-   `Edad`
+
+-   `Sexo`
+
+
 
 # Análisis exploratorio
+```{r}
 
+str(latinobarometro)
+
+head(latinobarometro)
+
+summary(latinobarometro)
+
+glimpse(latinobarometro)
+
+skim(latinobarometro)
+```
+
+
+# Análisis descriptivo
 
 ```{r}
 #| label: Setup
@@ -70,6 +165,9 @@ library(rio)
 library(skimr)
 library(tidyr)
 library(haven)
+library(plotly)
+library(DT)
+
 ```
 
 ```{r}
