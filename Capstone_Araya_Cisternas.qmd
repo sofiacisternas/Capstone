@@ -42,7 +42,7 @@ El Instituto Internacional para la Democracia y la Asistencia Electoral (IDEA In
 
 ```{r}
 https://raw.githubusercontent.com/usuario/repositorio/main/img/imagen.png
-![Mapa del área de estudio](https://raw.githubusercontent.com/usuario/repositorio/main/img/imagen.png) 
+![Mapa del área de estudio](https://raw.https://github.com/sofiacisternas/Capstone/blob/main/Indicadores%20IDEA.png) 
 ```
 Los indicadores provienen de 22 fuentes de datos diferentes y se analizan en conjunto con datos cualitativos centrados en eventos sobre el desarrollo de la democracia en los países analizados (IDEA Internacional, 2025).
 
@@ -197,6 +197,7 @@ skim(latinobarometro)
 
 # Referencias
 
+- Centro de Estudio Públicos. (2025).  Encuesta CEP N°95, Septiembre - Octubre 2025. https://static.cepchile.cl/uploads/cepchile/2025/10/13-113839_vwlh_ppt95_conferencia_OP_con-anexo_VF_29102025.pdf
 - IDEA Internacional. (s.f.). Chile. https://www.idea.int/democracytracker/country/chile 
 - IDEA Internacional. (2025). The Global State of Democracy 2025: Democracy on the Move. https://www.idea.int/publications/catalogue/global-state-of-democracy-2025-democracy-on-the-move?lang=en
 - Universidad de Chile. (2025). Los ejes del debate sobre la democracia: Deterioro global y crisis del “delivery”. https://gobierno.uchile.cl/noticias/233404/los-ejes-del-debate-sobre-la-democracia-deterioro-global-y-crisis
