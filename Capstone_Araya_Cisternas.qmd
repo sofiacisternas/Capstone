@@ -21,38 +21,166 @@ format:
     smooth-scroll: TRUE
 ---
 ```{r}
-rm(list = ls())
+#| label: Setup
+#| include: FALSE
+#rm(list = ls())
+
+library(dplyr)
+library(ggplot2)
+library(skimr)
+library(tidyr)
+library(haven)
 library(readxl)
+library(janitor)
+library(stringr)
 ```
-
-```{r}
-library(rio)
-
-latinobarometro <- import("Latinobarometro_2024_Excel_esp_v20250817.xlsx")
-```
-
 
 # Problematización
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+Problema Según el informe “El estado global de la democracia” de IDEA Internacional, en 2024 el 54% de los países han sufrido un deterioro en al menos un indicador clave de desempeño democrático. AGREGAR SOBRE CHILE → SOFI
+
+En este contexto, se vuelve relevante identificar y analizar las características de la ciudadanía con respecto a sus características personales, generacionales y territoriales con la finalidad de predecir su apoyo a la democracia.
 
 # Pregunta de análisis
 
-# Objetivos
+Debido a la caracterización antes mencionada, es que surge la siguiente pregunta de investigación: ¿De qué manera se puede predecir el apoyo a la democracia de las personas en Chile analizando sus características personales, generacionales y territoriales de participación política mediante un modelo de Random forest?
 
-## Objetivo general
+# Objetivo general del proyecto
 
-## Objetivos específicos
+Identificar y analizar las diferentes características personales, generacionales y territoriales de participación política que permiten clasificar a las personas de acuerdo con su nivel de apoyo a la democracia (alto, medio, bajo) utilizando variables de participación política, actitudes cívicas y características sociodemográficas mediante un modelo de Random Forest.
+
 
 # Fuente de datos y variables a utilizar
 
-
-
 ```{r}
+#| label: Cargar base de datos
 
-latinobarometro <- read_excel()
+#Cargar url que contiene la BBDD
+url <- "https://raw.githubusercontent.com/sofiacisternas/Capstone/main/Latinobarometro_2024_Excel_esp_v20250817.xlsx"
+
+#Crear archivo
+archivo <- tempfile(fileext = ".xlsx")
+
+#Descargar archivo
+download.file(url, archivo, mode = "wb")
+
+#Archivo como DF
+latinobarometro <- read_excel(archivo)
+
 ```
 
+```{r}
+#| label: Limpiar base de datos para posteriormente filtrar
+
+limpieza <- latinobarometro %>%
+  rename_with(~ str_extract(., "^[^ :]+"))
+```
+
+```{r}
+#| label: Filtrar base
+
+base <- limpieza %>% 
+  select(
+    # Variable dependiente
+    P11STGBS,
+    
+    # Participación política
+    P26ST,
+    P38STGBS,
+    P39STGBS.A,
+    P44ST,
+    
+    # Actitudes cívicas / institucionales
+    P2ST,
+    P6STGBS,
+    starts_with("P14STGBS"),  # Confianza en instituciones A-N
+    P15STGBS,
+    starts_with("P3NOIJ"),
+    
+    # Sociodemográficas
+    P16ST,
+    S1,
+    S2,
+    S6,
+    S16,
+    EDAD,
+    SEXO
+  )
+```
+
+## Variables del modelo
+
+Variable dependiente:
+
+-   `P11STGBS` ¿Con cuál de las siguientes frases está Ud. más de acuerdo?
+
+Variables independientes:
+
+Participación política:
+
+-   `P26ST.` ¿Cuál frase está más cerca de su manera de pensar?
+
+-   `P38STGBS.` ¿Hay algún partido político hacia el cual se sienta usted más cercano que hacia el resto de los partidos?
+
+-   `P39STGBS.A` Si este domingo hubiera elecciones, ¿Por cuál partido político votaría Ud.?
+
+-   `P44ST.` ¿Dónde suele Ud expresar sus opiniones sobre los problemas del país o Ud no suele hacerlo?
+
+Actitudes cívicas / institucionales:
+
+-   `P2ST.` ¿Diría Ud. que este país...?
+
+-   `P6STGBS.` ¿Cómo calificaría en general la situación económica actual del país? Diría Ud. que es...?
+
+-   `P14STGBS A-N.` ¿cuánta confianza tiene usted en ellas: mucha (1), algo (2), poca (3) o ninguna confianza(4) en…?
+
+    1.  Las Fuerzas Armadas
+
+    2.  La policía/Carabineros
+
+    3.  La Iglesia
+
+    4.  Congreso/Parlamento
+
+    5.  Gobierno
+
+    6.  Poder Judicial
+
+    7.  Los partidos políticos
+
+    8.  (La institución Electoral del país)
+
+    9.  El presidente
+
+    10. Radio
+
+    11. Televisión
+
+    12. Redes sociales
+
+    13. Diarios
+
+    14. Sindicatos
+
+-   `P15STGBS.` ¿Ud. aprueba o no aprueba la gestión del gobierno que encabeza el presidente (nombre)?
+
+-   `P3NOIJ.` ¿Podría usted indicar aquéllos que no le gustaría tener de vecinos?
+
+Sociodemográficas:
+
+-   `P16ST.` En una escala dónde “00" es la “izquierda” y “10" la “derecha”, ¿Dónde se ubicaría Ud.?
+
+-   `S1.` ¿Cuál es su religión?
+
+-   `S2.` ¿Ud. se describiría como perteneciendo a la clase...?
+
+-   `S6.` Usted o algún familiar cercano recibe algún beneficio o apoyo del gobierno de su país?
+
+-   `S16.` ¿Es Ud. ciudadano (NACIONALIDAD)?
+
+-   `Edad`
+
+-   `Sexo`
 
 # Análisis descriptivo
 
@@ -60,16 +188,15 @@ latinobarometro <- read_excel()
 
 
 ```{r}
-#| label: Setup
-#| include: FALSE
-rm(list = ls())
+str(latinobarometro)
 
-library(dplyr)
-library(ggplot2)
-library(rio)
-library(skimr)
-library(tidyr)
-library(haven)
+head(latinobarometro)
+
+summary(latinobarometro)
+
+glimpse(latinobarometro)
+
+skim(latinobarometro)
 ```
 
 ```{r}
@@ -80,8 +207,7 @@ When you click the **Render** button a document will be generated that includes 
 You can add options to executable code like this
 
 ```{r}
-#| echo: false
-2 * 2
+
 ```
 
 The `echo: false` option disables the printing of code (only output is displayed).
