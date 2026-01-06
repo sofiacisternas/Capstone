@@ -71,6 +71,10 @@ latinobarometro <- read_excel(archivo)
 
 ```
 
+#Limpieza y filtrado de datos
+
+## Limpieza
+
 ```{r}
 #| label: Limpiar base de datos para posteriormente filtrar
 
@@ -78,6 +82,8 @@ limpieza <- latinobarometro %>%
   rename_with(~ str_extract(., "^[^ :]+"))
 ```
 
+
+## Filtrado
 ```{r}
 #| label: Filtrar base
 
@@ -106,9 +112,179 @@ base <- limpieza %>%
     S6,
     S16,
     EDAD,
-    SEXO
+    SEXO,
+    REG
   )
 ```
+
+## Recodificación de P39STGBS.A en derecha/centro/izquierda
+
+```{r}
+
+
+
+```
+
+
+## Renombre de variables
+
+```{r}
+#| label: rename de variables
+base <- base %>% 
+  rename(c(#variable dependiente
+         apoyo_democracia = P11STGBS, 
+         
+         # Participación política
+         imporancia_voto = P26ST,
+         cercania_partido = P38STGBS,
+         expr_opiniones = P44ST,
+         
+         # Actitudes cívicas / institucionales
+         ev_pais = P2ST,
+         sit_economica = P6STGBS,
+         aprob_gob = P15STGBS,
+         
+         #sociodemograficas
+         ideologia = P16ST,
+         religion = S1,
+         clase_social = S2,
+         benef_gob = S6,
+         region = REG,
+         sexo = SEXO)
+  )
+  
+  
+
+```
+
+
+## Renombre de las respuestas
+
+No sabía si quieres cambiar las respuestas de las variables, así que añadí esto por si acaso. Si quieres lo dejas o lo sacas.
+Debo revisar el factor de religión, porque si bien en el pdf salen 18 alternativas, en el excel no se ocupan todas. También debo revisar importancia_voto, porque se duplica y termina añadiendo una nueva columna a la base de datos.
+
+```{r}
+
+base <- base %>% 
+  mutate(
+  apoyo_democracia = factor(apoyo_democracia, levels = c(1, 2, 3, 4, 5),
+                            labels = c("La democracia es preferible a cualquier otra forma de gobierno", 
+                                      "En algunas circunstancias, un gobierno autoritario puede ser preferible a uno democrático",
+                                      "A la gente como uno, nos da lo mismo un régimen democrático que uno no democrático",
+                                      "No sabe", 
+                                      "No contesta")),
+  importancia_voto = factor(imporancia_voto, levels = c(1, 2, -1, -2),
+                            labels = c("La manera como uno vota puede hacer que las cosas sean diferentes en el futuro",
+                             "No importa como uno vote, no hará que las cosas sean mejor en el futuro",
+                             "No sabe", "No contesta")),
+                  
+  cercania_partido = factor(cercania_partido, levels = c(1, 2, 3),
+                            labels = c("Sí", "No", "No sabe / No contesta")),
+  
+  expr_opiniones = factor(expr_opiniones, levels = c(1, 2, 3, 4, 5, 6),
+                          labels = c("Manifestación/protesta", "Redes sociales", "Entre amigos", "En familia",
+                                     "No suelo hacerlo", "No sabe / No contesta")),
+  
+  ev_pais = factor(ev_pais, levels = c(1, 2, 3, 4, 5), 
+                   labels = c("Está progresando", "Está estancado", "Está en retroceso", "No sabe", "No contesta")),
+  
+  sit_economica = factor(sit_economica, levels = c(1, 2, 3, 4, 5, 6, 7),
+                         labels = c("Muy buena", "Buena", "Regular", "Mala", "Muy mala", "No sabe", "No contesta")),
+  
+  aprob_gob = factor(aprob_gob, levels = c(1, 2, -5),
+                     labels = c("Aprueba", "No aprueba", "No sabe / No contesta")),
+  
+  religion = factor(religion, levels = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 97, -1, -2), 
+                    labels = c("Católica", "Evangélica sin especificar", "Evangélica bautista", 
+                               "Evangélica metodista", "Evangélica pentecostal", "Adventista", "Testigos de Jehová",
+                               "Mormón", "Judía", "Protestante", "Cultos afro/americanos, Umbanda, etc", 
+                               "Creyente, no pertenece a Iglesia", "Agnóstico", "Ateo", "Otra", "Ninguna",
+                               "No sabe", "No contesta")), 
+  
+  clase_social = factor(clase_social, levels = c(1, 2, 3, 4, 5, 6, 7), 
+                        labels = c("Alta", "Media Alta", "Media", "Media Baja", "Baja", "No sabe", "No contesta")), 
+  
+  benef_gob = factor(benef_gob, levels = c(1, 2, 3, 4, 5), 
+                     labels = c("Sí usted", "Sí, un familiar", "Sí, ambos", "No", "No sabe / No contesta")),
+  
+  sexo = factor(sexo, levels = c(1, 2), 
+                labels = c("Hombre", "Mujer"))
+    
+    
+     )#Renombra las respuestas de la variable
+
+skim(base$religion)
+
+```
+
+
+## Transformación de variables a factor o numeric según corresponda
+Variables que pasan a factor:
+Apoyo democracia
+
+Importancia voto
+Cercanía a partido político
+Partido por el que votaría
+Dónde expresa opiniones
+
+Recibe beneficios del gobierno
+Región
+Sexo
+
+Variables que quedan numéricas:
+Evaluación país
+Ideología
+Situación económica
+Clase social
+
+
+```{r}
+base <- base %>% 
+  mutate(#variable dependiente
+         apoyo_democracia = as_factor(apoyo_democracia),
+         # Participación política
+         imporancia_voto = as_factor(imporancia_voto),
+         cercania_partido = as_factor(cercania_partido),
+         expr_opiniones = as_factor(expr_opiniones),
+         
+         # Actitudes cívicas / institucionales
+         ev_pais = as.numeric(ev_pais),
+         sit_economica = as.numeric(sit_economica),
+         aprob_gob = as_factor(aprob_gob),
+         
+         #sociodemograficas
+         ideologia = as.numeric(ideologia),
+         religion = as_factor(religion),
+         clase_social = as.numeric(clase_social),
+         benef_gob = as_factor(benef_gob),
+         region = as_factor(region),
+         sexo = as_factor(sexo)
+  )
+  
+  
+  
+```
+
+
+
+
+
+
+# Análisis exploratorio
+
+```{r}
+
+str(base)
+
+head(base)
+
+summary(base)
+
+glimpse(base)
+
+skim(base)
+```
+
 
 ## Variables del modelo
 
@@ -171,19 +347,6 @@ base <- limpieza %>%
 - Sexo
 
 
-# Análisis exploratorio
-```{r}
-
-str(latinobarometro)
-
-head(latinobarometro)
-
-summary(latinobarometro)
-
-glimpse(latinobarometro)
-
-skim(latinobarometro)
-```
 
 
 # Análisis descriptivo
