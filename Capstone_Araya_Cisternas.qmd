@@ -1,5 +1,5 @@
 ---
-title: "Caracterización según apoyo a la democracia"
+title: "Caracterización de las personas según su nivel de apoyo a la democracia"
 author: "Juan Araya y Sofía Cisternas"
 date: "`r format(Sys.Date())`"
 lang: es
@@ -162,26 +162,44 @@ P11STGBS. "¿Con cuál de las siguientes frases está Ud. más de acuerdo?" (La 
 - S2. "¿Ud. se describiría como perteneciendo a la clase...? (Alta = 1, Media alta = 2, Media = 3, Media baja = 4, Baja = 5)
 - S6. "¿Usted o algún familiar cercano recibe algún beneficio o apoyo del gobierno?" (Sí, usted = 1, Sí, un familiar = 2, Sí, ambos = 3)
 - S16. "¿Es Ud. ciudadano (nacionalidad del país)?" (Sí = 1, No = 2)
-- "Región" (Codificación territorial)
-- "Edad" (Respuesta numérica)
-- "Sexo" (Codificación del estudio)
+- "Región"
+- "Edad"
+- "Sexo"
 
-# Análisis descriptivo
+# Análisis exploartorio y descriptivo
+En primer lugar, para poder analizar las variables y su distribución, es necesario realizar una serie de modificaciones, a fin de facilitar el tratamiento de los datos y de interpretación de resultados.
+## Observación inicial de base filtrada
 ```{r}
+#| label: Primera visualización base final
+#| include: FALSE
 
-str(latinobarometro)
+str(base)
 
-head(latinobarometro)
+head(base)
 
-summary(latinobarometro)
+summary(base)
 
-glimpse(latinobarometro)
+glimpse(base)
 
-skim(latinobarometro)
+skim(base)
+```
+## Modificación de variables
+```{r}
+#| label: Recodificación
+
+base <- base %>%
+mutate()
+EDAD, P11STGBS, S1, P39STGBS
+```
+
+```{r}
+#| label: Tratamiento NA y valores perdidos
+ REVISAR EL CASO A CASO, los valores perdidos pueden ser: 0, 8, 97, 99 (ver si hay otro)
+
 ```
 
 
-# Análisis exploratorio
+# Random Forest
 
 
 
