@@ -58,7 +58,7 @@ Encuesta Latinobarómetro 2024 - Base de datos Chile
 #| label: Cargar base de datos
 
 #Cargar url que contiene la BBDD
-url <- "https://raw.githubusercontent.com/sofiacisternas/Capstone/main/Latinobarometro_2024_Excel_esp_v20250817.xlsx"
+url <- "https://raw.githubusercontent.com/sofiacisternas/Capstone/main/F00018328-Latinobarometro_2024_Chile_Excel_esp_v1.xlsx"
 
 #Crear archivo
 archivo <- tempfile(fileext = ".xlsx")
@@ -109,7 +109,6 @@ base <- limpieza %>%
     SEXO
   )
 ```
-
 
 ## Variables del modelo
 
