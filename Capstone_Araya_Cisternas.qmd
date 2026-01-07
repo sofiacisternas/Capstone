@@ -36,6 +36,8 @@ library(janitor)
 library(stringr)
 library(png)
 library(grid)
+library(epiDisplay)
+library(plotly)
 ```
 
 # Problematización
@@ -53,7 +55,7 @@ download.file(png, destfile = "indicadores.png", mode = "wb")
 img <- readPNG("indicadores.png")
 grid.raster(img)
 ```
-Fuente: IDEA Internacional, 2025.
+*Fuente: IDEA Internacional, 2025.*
 
 Los indicadores provienen de 22 fuentes de datos diferentes y se analizan en conjunto con datos cualitativos centrados en eventos sobre el desarrollo de la democracia en los países analizados (IDEA Internacional, 2025).
 
@@ -107,7 +109,7 @@ limpieza <- latinobarometro %>%
 #| label: Filtrar base
 
 base <- limpieza %>% 
-  select(
+  dplyr::select(
     #Variable dependiente
     P11STGBS,
     
@@ -156,7 +158,7 @@ P11STGBS. "¿Con cuál de las siguientes frases está Ud. más de acuerdo?" (La 
 - S1. "¿Cuál es su religión?" (Respuesta abierta)
 - S2. "¿Ud. se describiría como perteneciendo a la clase...? (Alta = 1, Media alta = 2, Media = 3, Media baja = 4, Baja = 5)
 - "Recodificación Edad" (16-25 = 1, 26-40 = 2, 41-60 = 3, 61 y más = 4)
-- "Sexo"
+- "Sexo" (Hombre = 1, Mujer = 2)
 
 # Análisis exploratorio y descriptivo
 En primer lugar, para poder analizar las variables y su distribución, es necesario realizar una serie de modificaciones, a fin de facilitar el tratamiento de los datos y de interpretación de resultados.
@@ -175,10 +177,16 @@ Para realizar el análisis deseado, en primer lugar se asigna como valor perdido
 
 Asimismo, la variable P16ST (espectro político) es recodificada para categorizarse en tres valores principales y fácilitar el análisis, donde los valores del 0 al 3 representan una representación en el espectro político con tendencia izquierdista, los valores del 4 al 6 una tendencia más de centro, y los valores del 7 al 10 como una identificación de tendencia hacia la derecha. 
 
-Finalmente, la variable S1 (identificación religiosa) se recodifica a fin de agrupar a las personas en dos categorías: identificación religiosa y sin identificación religiosa.
+Por otra parte, la variable S1 (identificación religiosa) se recodifica a fin de agrupar a las personas en dos categorías: identificación religiosa y sin identificación religiosa.
+
+Finalmente, cabe establecer que, si bien la variable que se utilizará para calcular el nivel de apoyo a la democracia no es recodificada ni se le asignan nuevas etiquetas, sus valores (1 al 3) se interpretarán de la siguiente manera:
+
+- Nivel Alto = 1 "La democracia es preferible a cualquier otra forma de gobierno" 
+- Nivel Medio = 3 "A la gente como uno le da lo mismo un régimen democrático que uno no democrático"
+- Nivel Bajo = 2 "En algunas circunstancias, un gobierno autoritario puede ser preferible a uno democrático"
+
 ```{r}
 #| label: Recodificación
-#| echo: false
 
 df <- base %>%
   #Valores perdidos por NA
@@ -200,16 +208,232 @@ df <- base %>%
     RS1 = case_when(
       S1 == 97 ~ 2, #Sin identificación religiosa
       TRUE ~ 1 #Identificación religiosa
-    )) %>% 
+    )) %>%
   na.omit()
 ```
 
-## 
+## Distribución de variables
+
+En la siguiente sección se presenta un análisis descriptivo de algunas de las variables a utilizar, para comprender cómo se distribuyen las distintas observaciones. 
+
+En primer lugar, se puede observar que la mayoría de las personas encuestadas (547 de 767) presentan un alto nivel de apoyo a la democracia, mientras que el nivel con menos cantidad de respuestas corresponde a un apoyo medio. Asimismo, se evidencia una distribución similar entre sexos, donde la diferencia es de 27 casos, favoreciendo a las mujeres; y que existe una mayor concentración en los rangos etarios de 26 a 40 años y de 41 a 60 años. En tanto, la mayoría de las personas establece que está algo o poco interesado en la política; y un porcentaje significativo opina que el país está estancado.
+<br><br>
+***Distribución por nivel de apoyo a la democracia***
 ```{r}
-#| label: 
+#Tabla
+t1 <- data.frame(
+  Categoria = c("Alto", "Bajo", "Medio"),
+  Frecuencia = as.vector(table(df$P11STGBS)),
+  Porcentaje = round(100 * as.vector(table(df$P11STGBS)) / length(df$P11STGBS), 1)
+)
 
+#Visualización
+t1
 ```
+<br>
 
+***Distribución por sexo***
+```{r}
+#Tabla
+t2 <-  data.frame(
+  Categoria = c("Hombre", "Mujer"),                
+  Frecuencia = as.vector(table(df$SEXO)),      
+  Porcentaje = round(100 * as.vector(table(df$SEXO)) / length(df$SEXO), 1)
+  )
+
+#Visualización
+t2
+```
+<br>
+***Distribución por rango etario***
+```{r}
+#Tabla
+t3 <- data.frame(
+  Categoria = c("16-25", "26-40", "41-60", "61 o más"),
+  Frecuencia = as.vector(table(df$REEDAD)),
+  Porcentaje = round(100 * as.vector(table(df$REEDAD)) / length(df$REEDAD), 1)
+)
+
+#Visualización
+t3
+```
+<br>
+***Distribución por interés en la política***
+```{r}
+#Tabla
+t4 <- data.frame(
+  Categoria = c("Muy interesado", "Algo interesado", "Poco interesado", "Nada interesado"),
+  Frecuencia = as.vector(table(df$P36STGBS)),
+  Porcentaje = round(100 * as.vector(table(df$P36STGBS)) / length(df$P36STGBS), 1)
+)
+
+#Visualización
+t4
+```
+<br>
+***Distribución por percpeción de progeso del país***
+```{r}
+#Tabla
+t5 <- data.frame(
+  Categoria = c("Está progresando", "Está estancado", "Está en retroceso"),
+  Frecuencia = as.vector(table(df$P2ST)),
+  Porcentaje = round(100 * as.vector(table(df$P2ST)) / length(df$P2ST), 1)
+)
+
+#Visualización
+t5
+```
+<br>
+En cambio, al observar la distribución de dichas variables independientes en relación con su nivel de apoyo a la democracia se puede apreciar que, hay más mujeres que hombres entre quienes presentan tanto un alto como medio nivel a la democracia, representando un 54,1% y 53,8% respectivamente. Contrariamente, los hombres concentran el 59,7% de los casos entre quienes presentan un bajo nivel de apoyo a la democracia.
+```{r}
+#| label: Gráfico sexo según nivel de apoyo a la democracia
+
+demo_sexo <- df %>%
+  group_by(P11STGBS, SEXO) %>%
+  summarise(Conteo = n(), .groups = "drop") %>%
+  group_by(P11STGBS) %>%
+  mutate(Porcentaje = Conteo / sum(Conteo) * 100,
+         P11STGBS = factor(P11STGBS, levels = c(1, 2, 3), labels = c("Alto", "Bajo", "Medio")),
+         SEXO = factor(SEXO, levels = c(1, 2), labels = c("Hombre", "Mujer"))) %>%  
+  ggplot(aes(x = P11STGBS, y = Porcentaje, fill = SEXO)) +
+  geom_bar(stat = "identity", position = "fill", color = "black") +  
+  coord_flip() + 
+  labs(
+    title = "Apoyo a la democracia por sexo",
+    x = "Apoyo a la democracia",  
+    y = "Porcentaje",
+    fill = "Sexo"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "right", 
+    plot.title = element_text(hjust = 0.5),  
+    axis.text.x = element_blank(),   
+    axis.ticks.x = element_blank()   
+  ) +
+  geom_text(
+    aes(label = scales::percent(Porcentaje / 100, accuracy = 0.1)),  
+    position = position_fill(vjust = 0.5), 
+    color = "white"
+  )
+
+
+ggplotly(demo_sexo, tooltip = "text")
+```
+<br>
+Al analizar los rangos etarios según el nivel de apoyo a la democracia, se puede observar que no existe una tendencia claramente diferenciada entre los grupos, pues en los tres niveles la distribución de los rangos es similar. 
+```{r}
+#| label: Gráfico rango etario según nivel de apoyo a la democracia
+
+demo_edad <- df %>%
+  group_by(P11STGBS, REEDAD) %>%
+  summarise(Conteo = n(), .groups = "drop") %>%
+  group_by(P11STGBS) %>%
+  mutate(Porcentaje = Conteo / sum(Conteo) * 100,
+         P11STGBS = factor(P11STGBS, levels = c(1, 2, 3), labels = c("Alto", "Bajo", "Medio")),
+         REEDAD = factor(REEDAD, levels = c(1, 2, 3, 4), labels = c("16-25", "26-40", "41-60", "61+"))) %>%  
+  ggplot(aes(x = P11STGBS, y = Porcentaje, fill = REEDAD)) +
+  geom_bar(stat = "identity", position = "fill", color = "black") +  
+  coord_flip() + 
+  labs(
+    title = "Apoyo a la democracia por edad",
+    x = "Apoyo a la democracia",  
+    y = "Porcentaje",
+    fill = "Edad"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "right", 
+    plot.title = element_text(hjust = 0.5),  
+    axis.text.x = element_blank(),   
+    axis.ticks.x = element_blank()   
+  ) +
+  geom_text(
+    aes(label = scales::percent(Porcentaje / 100, accuracy = 0.1)),  
+    position = position_fill(vjust = 0.5), 
+    color = "white"
+  )
+
+
+ggplotly(demo_edad, tooltip = "text")
+```
+<br>
+En cuanto al nivel de interés en la política, el gráfico evidencia que, gran parte de quienes presentan un apoyo medio a la democracia no están nada interesados en la política, representando el 40,7%. En cambio, existe una concentración similar entre los niveles Alto y Bajo de quienes declaran estar algo y poco interesados.
+```{r}
+#| label: Gráfico interés en la política según nivel de apoyo a la democracia
+
+demo_pol <- df %>%
+  group_by(P11STGBS, P36STGBS) %>%
+  summarise(Conteo = n(), .groups = "drop") %>%
+  group_by(P11STGBS) %>%
+  mutate(Porcentaje = Conteo / sum(Conteo) * 100,
+         P11STGBS = factor(P11STGBS, levels = c(1, 2, 3), labels = c("Alto", "Bajo", "Medio")),
+         P36STGBS = factor(P36STGBS, levels = c(1, 2, 3, 4), labels = c("Muy interesado", "Algo interesado",
+                                                                        "Poco interesado", "Nada interesado"))) %>%  
+  ggplot(aes(x = P11STGBS, y = Porcentaje, fill = P36STGBS)) +
+  geom_bar(stat = "identity", position = "fill", color = "black") +  
+  coord_flip() + 
+  labs(
+    title = "Apoyo a la democracia por interés en la política",
+    x = "Apoyo a la democracia",  
+    y = "Porcentaje",
+    fill = "Edad"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "right", 
+    plot.title = element_text(hjust = 0.5),  
+    axis.text.x = element_blank(),   
+    axis.ticks.x = element_blank()   
+  ) +
+  geom_text(
+    aes(label = scales::percent(Porcentaje / 100, accuracy = 0.1)),  
+    position = position_fill(vjust = 0.5), 
+    color = "white"
+  )
+
+
+ggplotly(demo_pol, tooltip = "text")
+```
+<br>
+En contraste a los gráficos previamente presentados, se puede observar entre quienes presentan un alto nivel de apoyo a la democracia predomina la percepción de que el país está  estancado (49,4%), seguida por la idea de que se encuentra en progreso (34,4%). Por el contrario, entre quienes presentan un bajo apoyo a la democracia, un 48,8% opina que el país está en retroceso. Finalmente, en el grupo con apoyo medio a la democracia también prevalece la percepción de estancamiento, con un 48,4%, seguida por el 36,3% que considera que el país está en retroceso.
+
+```{r}
+#| label: Gráfico percepción situación países según nivel de apoyo a la democracia
+
+demo_sit <- df %>%
+  group_by(P11STGBS, P2ST) %>%
+  summarise(Conteo = n(), .groups = "drop") %>%
+  group_by(P11STGBS) %>%
+  mutate(Porcentaje = Conteo / sum(Conteo) * 100,
+         P11STGBS = factor(P11STGBS, levels = c(1, 2, 3), labels = c("Alto", "Bajo", "Medio")),
+         P2ST = factor(P2ST, levels = c(1, 2, 3), labels = c("Está progresando", "Está estancado",
+                                                                        "Está en retroceso"))) %>%  
+  ggplot(aes(x = P11STGBS, y = Porcentaje, fill = P2ST)) +
+  geom_bar(stat = "identity", position = "fill", color = "black") +  
+  coord_flip() + 
+  labs(
+    title = "Apoyo a la democracia por opinión país",
+    x = "Apoyo a la democracia",  
+    y = "Porcentaje",
+    fill = "Opinión país"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "right", 
+    plot.title = element_text(hjust = 0.5),  
+    axis.text.x = element_blank(),   
+    axis.ticks.x = element_blank()   
+  ) +
+  geom_text(
+    aes(label = scales::percent(Porcentaje / 100, accuracy = 0.1)),  
+    position = position_fill(vjust = 0.5), 
+    color = "white"
+  )
+
+
+ggplotly(demo_sit, tooltip = "text")
+```
 
 # Random Forest
 
@@ -217,7 +441,7 @@ df <- base %>%
 
 # Referencias
 
-- Centro de Estudio Públicos. (2025).  Encuesta CEP N°95, Septiembre - Octubre 2025. https://static.cepchile.cl/uploads/cepchile/2025/10/13-113839_vwlh_ppt95_conferencia_OP_con-anexo_VF_29102025.pdf
-- IDEA Internacional. (s.f.). Chile. https://www.idea.int/democracytracker/country/chile 
-- IDEA Internacional. (2025). The Global State of Democracy 2025: Democracy on the Move. https://www.idea.int/publications/catalogue/global-state-of-democracy-2025-democracy-on-the-move?lang=en
-- Universidad de Chile. (2025). Los ejes del debate sobre la democracia: Deterioro global y crisis del “delivery”. https://gobierno.uchile.cl/noticias/233404/los-ejes-del-debate-sobre-la-democracia-deterioro-global-y-crisis
+- Centro de Estudio Públicos. (2025).  *Encuesta CEP N°95, Septiembre - Octubre 2025.* https://static.cepchile.cl/uploads/cepchile/2025/10/13-113839_vwlh_ppt95_conferencia_OP_con-anexo_VF_29102025.pdf
+- IDEA Internacional. (s.f.). *Chile.* https://www.idea.int/democracytracker/country/chile 
+- IDEA Internacional. (2025). *The Global State of Democracy 2025: Democracy on the Move.* https://www.idea.int/publications/catalogue/global-state-of-democracy-2025-democracy-on-the-move?lang=en
+- Universidad de Chile. (2025). *Los ejes del debate sobre la democracia: Deterioro global y crisis del “delivery”.* https://gobierno.uchile.cl/noticias/233404/los-ejes-del-debate-sobre-la-democracia-deterioro-global-y-crisis
