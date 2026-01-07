@@ -24,7 +24,7 @@ format:
 ```{r}
 #| label: Setup
 #| include: FALSE
-#rm(list = ls())
+rm(list = ls())
 
 library(dplyr)
 library(ggplot2)
@@ -63,7 +63,7 @@ Asimismo, las tendencias globales han demostrado que las libertades civiles fuer
 
 Chile, por su parte, se caracteriza por tener un alto desempeño en las cuatro categorías analizadas, pero especialmente en materia de Representación (0,88/1) y Estado de Derecho (0,73/1). En este sentido, el país está dentro del 25% de los países con mejor desempeño a nivel global, demostrando avances significativos en integridad y seguridad personal, libertades civiles y acceso a la justicia (IDEA Internacional, s.f.).
 
-A pesar del estable posicionamiento del país en materia democrática, se ha evidenciado una baja confianza de la ciudadanía hacia las instituciones políticas y de representación. La Encuesta CEP n°95, correspondiente a septiembre-octubre 2025, los partidos políticos y el Congreso Nacional son las instituciones evaluadas con menor nivel de confianza, alcanzando una puntuación de solo el 3% y 8% respectivamente. Similarmente, la encuesta evidencia que un 61% de las personas considera que la situación política en Chile está mala o muy mala, en contrate con el 10% que opina que está buena o muy buena. Sin embargo, solo un 19% opina que la democracia en el país funciona mal o muy mal (Encuesta CEP N°95, 2025).
+A pesar del estable posicionamiento del país en materia democrática, se ha evidenciado una baja confianza de la ciudadanía hacia las instituciones políticas y de representación. La Encuesta CEP N°95, correspondiente a septiembre-octubre 2025, los partidos políticos y el Congreso Nacional son las instituciones evaluadas con menor nivel de confianza, alcanzando una puntuación de solo el 3% y 8% respectivamente. Similarmente, la encuesta evidencia que un 61% de las personas considera que la situación política en Chile está mala o muy mala, en contrate con el 10% que opina que está buena o muy buena. Sin embargo, solo un 19% opina que la democracia en el país funciona mal o muy mal (Encuesta CEP N°95, 2025).
 
 Por tanto, se vuele relevante analizar cómo se caracterizan las personas según su nivel de apoyo a la democracia según factores sociodemográficos, niveles de participación política y percepciones ciudadanas e institucionales. Debido a que, algunos académicos han argumentado que el apoyo de la ciudadanía hacia la democracia se mide en gran parte por la capacidad de “delivery” de este tipo de régimen, es decir, por la capacidad de las instituciones de generar resultados concretos en la vida de las personas (Escudero, 2025). Asimismo, se ha señalado que la desafección ciudadana funciona como una antesala al autoritarismo, donde dicha desafección tiende a manifestarse cuando las personas sienten que el régimen democrático no resuelve sus necesidades básicas ni garantiza sus derechos (Leibe, 2025).
 
@@ -108,36 +108,27 @@ limpieza <- latinobarometro %>%
 
 base <- limpieza %>% 
   select(
-    # Variable dependiente
+    #Variable dependiente
     P11STGBS,
     
-    # Participación política
+    #Participación política
     P26ST,
     P38STGBS,
-    P39STGBS.A,
     P44ST,
     P36STGBS,
     
-    # Percepciones cívicas / institucionales
+    #Percepciones cívicas / institucionales
     P2ST,
-    P6STGBS,
-    starts_with("P14STGBS"),
-    P15STGBS,
-    starts_with("P3NOIJ"),
     P17ST,
     P25ST,
-    P51ST,
     P54N,
     
     # Sociodemográficas
     P16ST,
     S1,
     S2,
-    S6,
-    S16,
-    EDAD,
-    SEXO,
-    REG)
+    REEDAD,
+    SEXO)
 ```
 
 ## Variables del modelo
@@ -151,18 +142,12 @@ P11STGBS. "¿Con cuál de las siguientes frases está Ud. más de acuerdo?" (La 
 #### Participación política
 - P26ST. "¿Cuál frase está más cerca de su manera de pensar?" (La manera como uno vota puede hacer que las cosas sean diferentes en el futuro = 1, No importa cómo uno vote, no hará que las cosas sean mejor en el futuro = 2)
 - P38STGBS. "¿Hay algún partido político hacia el cual se sienta usted más cercano que hacia el resto de los partidos?" (Sí = 1, No = 2)
-- P39STGBS.A "Si este domingo hubiera elecciones, ¿por cuál partido político votaría Ud.?" (Respuesta abierta)
 - P44ST. "¿Dónde suele Ud. expresar sus opiniones sobre los problemas del país o Ud. no suele hacerlo?" (Manifestación/protesta = 1, Redes sociales = 2, Entre amigos = 3, En familia = 4, No suelo hacerlo = 5)
 - P36STGBS. "¿Cuán interesado está Ud. en la política?" (Muy interesado = 1, Algo interesado = 2, Poco interesado = 3, Nada interesado = 4)
 
 #### Percepciones cívicas / institucionales
 - P2ST. "¿Diría Ud. que este país...?" (Está progresando = 1, Está estancado = 2, Está en retroceso = 3)
-- P6STGBS. "¿Cómo calificaría en general la situación económica actual del país?" (Muy buena = 1, Buena = 2, Regular = 3, Mala = 4, Muy mala = 5)
-- P14STGBS A–N. "¿Cuánta confianza tiene usted en las siguientes instituciones?" (Mucha confianza = 1, Algo de confianza = 2, Poca confianza = 3, Ninguna confianza = 4) (Fuerzas Armadas, Policía/Carabineros, Iglesia, Congreso/Parlamento, Gobierno, Poder Judicial, Partidos políticos, Institución electoral del país, Presidente, Radio, Televisión, Redes sociales, Diarios, Sindicatos)
-- P15STGBS. "¿Ud. aprueba o no aprueba la gestión del gobierno que encabeza el presidente?" (Aprueba = 1, No aprueba = 2)
-- P3NOIJ. "¿Podría usted indicar a quiénes no le gustaría tener como vecinos?" (Personas de una raza o etnia distinta = 1, Inmigrantes o trabajadores extranjeros = 2, Homosexuales = 3, Personas de una religión distinta = 4, Bebedores, drogadictos o alcohólicos = 5, Parejas que viven juntas sin estar casadas = 6, Personas que hablan un idioma distinto = 7, Jóvenes = 8)
 - P54N. "En una escala donde 00 es para nada corrupto y 10 totalmente corrupto, ¿cuán corrupto cree Ud. que es el país?" (Escala 00–10)
-- P51ST. "¿Con qué frecuencia se preocupa Ud. de que pueda llegar a ser víctima de un delito con violencia?" (Todo o casi todo el tiempo = 1, Algunas veces = 2, Ocasionalmente = 3, Nunca = 4)
 - P25ST. "¿Usted se siente políticamente representado en el parlamento/congreso?" (Sí = 1, No = 2)
 - P17ST. "¿Cuán justa cree Ud. que es la distribución del ingreso en el país?" (Muy justa = 1, Justa = 2, Injusta = 3, Muy injusta = 4)
 
@@ -170,41 +155,58 @@ P11STGBS. "¿Con cuál de las siguientes frases está Ud. más de acuerdo?" (La 
 - P16ST. "En una escala donde 00 es izquierda y 10 es derecha, ¿dónde se ubicaría Ud.?" (Escala 00–10)
 - S1. "¿Cuál es su religión?" (Respuesta abierta)
 - S2. "¿Ud. se describiría como perteneciendo a la clase...? (Alta = 1, Media alta = 2, Media = 3, Media baja = 4, Baja = 5)
-- S6. "¿Usted o algún familiar cercano recibe algún beneficio o apoyo del gobierno?" (Sí, usted = 1, Sí, un familiar = 2, Sí, ambos = 3)
-- S16. "¿Es Ud. ciudadano (nacionalidad del país)?" (Sí = 1, No = 2)
-- "Región"
-- "Edad"
+- "Recodificación Edad" (16-25 = 1, 26-40 = 2, 41-60 = 3, 61 y más = 4)
 - "Sexo"
 
-# Análisis exploartorio y descriptivo
+# Análisis exploratorio y descriptivo
 En primer lugar, para poder analizar las variables y su distribución, es necesario realizar una serie de modificaciones, a fin de facilitar el tratamiento de los datos y de interpretación de resultados.
 ## Observación inicial de base filtrada
+
 ```{r}
 #| label: Primera visualización base final
 #| include: FALSE
 
-str(base)
-
-head(base)
-
 summary(base)
-
-glimpse(base)
-
 skim(base)
 ```
+
 ## Modificación de variables
+Para realizar el análisis deseado, en primer lugar se asigna como valor perdido todos aquellos casos en los cuales se contemple los números -5, -2 y -1. Adicionalmente, en la variable P16ST también se asigna como valor perdido en número 97. Esto se debe a que en la variable de religión, este valor corresponde a aquellas personas que establecieron no identificarse con ninguna religión.
+
+Asimismo, la variable P16ST (espectro político) es recodificada para categorizarse en tres valores principales y fácilitar el análisis, donde los valores del 0 al 3 representan una representación en el espectro político con tendencia izquierdista, los valores del 4 al 6 una tendencia más de centro, y los valores del 7 al 10 como una identificación de tendencia hacia la derecha. 
+
+Finalmente, la variable S1 (identificación religiosa) se recodifica a fin de agrupar a las personas en dos categorías: identificación religiosa y sin identificación religiosa.
 ```{r}
 #| label: Recodificación
+#| echo: false
 
-#base <- base %>%
-#mutate()
-#EDAD, P11STGBS, S1, P39STGBS
+df <- base %>%
+  #Valores perdidos por NA
+  mutate(across(
+    everything(),
+    ~ ifelse(. %in% c(-5, -2, -1), NA, .)
+  )) %>%
+  #P16ST - Espectro político
+  mutate(
+    RP16 = case_when(
+      P16ST %in% c(0, 1, 2, 3) ~ 1, #Izquierda
+      P16ST %in% c(4, 5, 6) ~ 2, #Centro
+      P16ST %in% c(7, 8, 9, 10) ~ 3, #Derecha
+      P16ST == 97 ~ NA_real_
+    )) %>%
+  
+  #S1 - Identificación religiosa
+  mutate(
+    RS1 = case_when(
+      S1 == 97 ~ 2, #Sin identificación religiosa
+      TRUE ~ 1 #Identificación religiosa
+    )) %>% 
+  na.omit()
 ```
 
+## 
 ```{r}
-#| label: Tratamiento NA y valores perdidos
-# REVISAR EL CASO A CASO, los valores perdidos pueden ser: 0, 8, 97, 99 (ver si hay otro)
+#| label: 
 
 ```
 
