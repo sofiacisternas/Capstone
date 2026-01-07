@@ -519,11 +519,9 @@ ggplotly(demo_sit, tooltip = "text")
 ## Árbol de decisión
 El siguiente árbol de decisión busca clasificar y caracterizar a las personas según su nivel de apoyo a la democracia (P11STGBS) según variables de participación política, percepciones cívicas e institucionales y características sociodemográficas. 
 
-Se puede observar que la creencia sobre la eficacia del voto (P26ST) es la variable más relevante entre todas las seleccionadas. En este sentido, entre quienes creen que su voto puede cambiar el futuro muestran un nivel de apoyo más alto, reforzándose aún más si no perciben que el país está retorcediendo (P2ST).
+Se puede observar que la creencia sobre la eficacia del voto (P26ST) es la variable más relevante entre todas las seleccionadas. En este sentido, entre quienes creen que su voto puede cambiar el futuro muestran un nivel de apoyo más alto, reforzándose aún más si no perciben que el país está retorcediendo (P2ST), además de tener cierto perfil respecto a los espacios en los cuales expresan su opinión sobre el país (P44ST).
 
-Contrariamente, las personas que consideran que el voto no influye tienden a percibir que el país se encuentra en retroceso y muestran niveles más bajos tanto de participación política como de apoyo a la democracia. Sin embargo, dentro de este grupo facotres como el sexo, la clase social percibida (S2) y la percepción sobre corrupción (P54N) o sobre la distribución de ingresos en el país (P17ST) aportan a explicar la variación de actitudes.
-
-Finalmente, las variables de interés en la política (P36STGBS), cercanía a los partidos políticos (P38STGBS) y posicionamiento en el espectro político (P16ST) ayudan a complementar la caracterización de las personas según su nivel de apoyo a la democracia.
+Adicionalmente, se evidencia que el nivel de apoyo a la democracia también se podría explicar con variables como el sexo, la clase social percibida (S2), los lugares donde se expresa la opinión sobre el país (P44ST) y la percepción de corrupción (P54N).
 
 ```{r}
 #| label: Árbol de decisión
