@@ -38,6 +38,9 @@ library(png)
 library(grid)
 library(epiDisplay)
 library(plotly)
+library(rpart)
+library(rpart.plot)
+library(party)
 ```
 
 # Problematización
@@ -437,7 +440,151 @@ ggplotly(demo_sit, tooltip = "text")
 
 # Random Forest
 
+## Árbol de regresión
 
+```{r}
+#| label: Árbol de regresión
+
+set.seed(15097)
+
+ar <- rpart(
+  P11STGBS ~ 
+    # Participación política
+    P26ST + 
+    P38STGBS + 
+    P44ST + 
+    P36STGBS +
+    
+    # Percepciones cívicas / institucionales
+    P2ST + 
+    P54N + 
+    P25ST + 
+    P17ST +
+    
+    # Sociodemográficas
+    RP16 + 
+    RS1 + 
+    S2 + 
+    REEDAD + 
+    SEXO,
+  
+  method = "class",
+  control = rpart.control(minbucket = 25, cp = 0),
+  data = df
+)
+
+
+print(ar, digits = 4)
+```
+
+```{r}
+#| label: Gráficar árbol de regresión
+#| message: FALSE
+#| warning: FALSE
+
+cols <- ifelse(ar$frame$yval == 1, "gray1", "hotpink")
+
+prp(ar, main = "Nivel de apoyo a la democracia", 
+    extra = 104,
+    nn = TRUE,  
+    fallen.leaves = TRUE, 
+    branch = .5, 
+    faclen = 0, 
+    trace = 1,
+    shadow.col = "gray",
+    branch.lty = 1,
+    branch.type = 5, 
+    split.cex = 1.2, 
+    split.prefix = "es ", 
+    split.suffix = "?", 
+    col = cols, 
+    border.col = cols, 
+    split.box.col = "lightgray",
+    split.border.col = "darkgray",
+    split.round = 0.5) 
+```
+
+## Random forest
+
+```{r}
+#| label: Random forest
+
+df$P11STGBS <- as.factor(df$P11STGBS)
+
+crf.df <- cforest(
+  P11STGBS ~ 
+    # Participación política
+    P26ST + 
+    P38STGBS + 
+    P44ST + 
+    P36STGBS +
+    
+    # Percepciones cívicas / institucionales
+    P2ST + 
+    P54N + 
+    P25ST + 
+    P17ST +
+    
+    # Sociodemográficas
+    RP16 + 
+    RS1 + 
+    S2 + 
+    REEDAD + 
+    SEXO,
+  
+  controls = cforest_control(
+    ntree = 500,
+    mincriterion = qnorm(0.8),
+    trace = TRUE
+  ),
+  
+  data = df
+)
+
+crf.df
+```
+
+```{r}
+crf.df.prob <- predict(crf.df, newdata = df, type = "prob")
+dim(crf.df.prob)
+```
+
+```{r}
+head(crf.df.prob)
+```
+
+
+```{r}
+crf.prob <- matrix(unlist(crf.df.prob), ncol = 3, byrow = TRUE)
+head(crf.prob)
+
+apply(crf.prob,2,mean)
+```
+
+```{r}
+rpart.prob <- predict(ar, newdata = df,type = "prob")
+head(rpart.prob)
+```
+
+```{r}
+out <- data.frame(rpart = rpart.prob[,2],
+cforest = crf.prob[,2],
+class = ar$where)
+names(out)
+```
+
+```{r}
+out%>%
+  group_by(class)%>%
+  summarise(rpart = mean(rpart),
+            cforest = mean(cforest))
+```
+
+```{r}
+ggplot(out, aes(x = rpart, y = cforest)) + geom_point()
+```
+
+# Conclusiones y recomendaciones
 
 # Referencias
 
