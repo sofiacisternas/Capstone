@@ -34,6 +34,8 @@ library(haven)
 library(readxl)
 library(janitor)
 library(stringr)
+library(png)
+library(grid)
 ```
 
 # Problematización
@@ -41,9 +43,18 @@ library(stringr)
 El Instituto Internacional para la Democracia y la Asistencia Electoral (IDEA Internacional) evalúa el desempeño democrático de 173 países a lo largo de los años por medio de la medición de diversos indicadores ligados al Estado de Derecho, la representación, participación y a los derechos humanos. Dichos indicadores se categorizan y contemplan los siguientes factores (IDEA Internacional, 2025):
 
 ```{r}
-https://raw.https://github.com/sofiacisternas/Capstone/blob/main/Indicadores%20IDEA.png
-![Mapa del área de estudio](https://raw.https://github.com/sofiacisternas/Capstone/blob/main/Indicadores%20IDEA.png) 
+#| label: Indicadores de rendimiento democrático
+#| echo: FALSE
+
+png <- "https://raw.githubusercontent.com/sofiacisternas/Capstone/main/Indicadores%20IDEA.png"
+
+download.file(png, destfile = "indicadores.png", mode = "wb")
+
+img <- readPNG("indicadores.png")
+grid.raster(img)
 ```
+Fuente: IDEA Internacional, 2025.
+
 Los indicadores provienen de 22 fuentes de datos diferentes y se analizan en conjunto con datos cualitativos centrados en eventos sobre el desarrollo de la democracia en los países analizados (IDEA Internacional, 2025).
 
 Con base a dichos datos, IDEA Internacional elabora un informe denominado como “El Estado Global de la Democracia”, en el cual se concentra el análisis efectuado y se emiten conclusiones a partir de los avances o retrocesos en indicadores fundamentales para el desarrollo democrático. En la última versión publicada, correspondiendo a las mediciones ejecutadas durante 2024, se evidenció que 54% (94) de los países han sufrido un deterioro en al menos uno de los factores en comparación con su desempeño hace cinco años. Contrariamente, solo el 32% (55) demostró avances en al menos uno de los factores en el mismo periodo (IDEA Internacional, 2025).
@@ -132,12 +143,8 @@ base <- limpieza %>%
     S16,
     EDAD,
     SEXO,
-<<<<<<< HEAD
-    REG
-=======
-    REGION
->>>>>>> 4a60dfc71405cb5a044598d8f786e1d12dec6702
-  )
+    REG)
+
 ```
 
 ## Recodificación de P39STGBS.A en derecha/centro/izquierda
@@ -417,14 +424,14 @@ skim(base)
 ```{r}
 #| label: Recodificación
 
-base <- base %>%
-mutate()
-EDAD, P11STGBS, S1, P39STGBS
+#base <- base %>%
+#mutate()
+#EDAD, P11STGBS, S1, P39STGBS
 ```
 
 ```{r}
 #| label: Tratamiento NA y valores perdidos
- REVISAR EL CASO A CASO, los valores perdidos pueden ser: 0, 8, 97, 99 (ver si hay otro)
+# REVISAR EL CASO A CASO, los valores perdidos pueden ser: 0, 8, 97, 99 (ver si hay otro)
 
 ```
 >>>>>>> 4a60dfc71405cb5a044598d8f786e1d12dec6702
