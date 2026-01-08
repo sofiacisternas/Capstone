@@ -100,7 +100,7 @@ latinobarometro <- read_excel(archivo)
 ```
 
 ```{r}
-#| label: Limpiar base de datos para posteriormente filtrar
+#| label: Limpiar nombre de variables para que solo queden con la primera palabra (código pregunta)
 
 limpieza <- latinobarometro %>%
   rename_with(~ str_extract(., "^[^ :]+"))
@@ -375,7 +375,7 @@ t5
 ```
 
 <br> 
-En cambio, al observar la distribución de dichas variables independientes en relación con su nivel de apoyo a la democracia se puede apreciar que, hay más mujeres que hombres entre quienes presentan tanto un alto como medio compromiso con la democracia, representando un 52,9% y 50,8% respectivamente. Al contrario, los hombres concentran el 56,4% de los casos entre quienes presentan un bajo nivel de apoyo a la democracia.
+En cambio, al observar la distribución de dichas variables independientes en relación con su nivel de apoyo a la democracia se puede apreciar que, hay más mujeres que hombres entre quienes presentan tanto un alto como bajo compromiso con la democracia, representando un 52,9% y 50,8% respectivamente. Al contrario, los hombres concentran el 56,4% de los casos entre quienes presentan un nivel medio de apoyo a la democracia.
 
 ```{r}
 #| label: Gráfico sexo según nivel de apoyo a la democracia
@@ -414,7 +414,7 @@ ggplotly(demo_sexo, tooltip = "text")
 ```
 
 <br> 
-Al analizar los rangos etarios según el nivel de apoyo a la democracia, se puede observar que no existe una tendencia claramente diferenciada entre los grupos, pues en los tres niveles la distribución de los rangos es similar.
+Al analizar los rangos etarios según el nivel de apoyo a la democracia, se puede observar que no existe una tendencia claramente diferenciada entre los grupos, pues en los tres niveles la distribución de los rangos es similar, considerando el número de casos correspondientes a la variable de rango etario.
 
 ```{r}
 #| label: Gráfico rango etario según nivel de apoyo a la democracia
@@ -453,7 +453,7 @@ ggplotly(demo_edad, tooltip = "text")
 ```
 
 <br> 
-En cuanto al nivel de interés en la política, el gráfico evidencia que, gran parte de quienes presentan un apoyo medio a la democracia no están nada interesados en la política, representando el 53%. En cambio, existe una concentración similar entre los niveles Alto y Bajo de quienes declaran estar algo y poco interesados.
+En cuanto al nivel de interés en la política, el gráfico evidencia que, gran parte de quienes presentan un bajo apoyo a la democracia no están nada interesados en la política, representando el 53%. En cambio, existe una concentración similar entre los niveles alto y medio de quienes declaran estar algo y poco interesados.
 
 ```{r}
 #| label: Gráfico interés en la política según nivel de apoyo a la democracia
@@ -494,7 +494,7 @@ ggplotly(demo_pol, tooltip = "text")
 ```
 
 <br> 
-En contraste a los gráficos previamente presentados, se puede observar que entre quienes presentan un alto nivel de apoyo a la democracia predomina la percepción de que el país está estancado (51,3%), seguida por la idea de que se encuentra en progreso (31,9%). Por el contrario, entre quienes presentan un bajo apoyo a la democracia, un 44,5% opina que el país está en retroceso. Finalmente, en el grupo con apoyo medio a la democracia también prevalece la percepción de estancamiento, con un 46,4%, seguida por el 42,5% que considera que el país está en retroceso.
+En contraste a los gráficos previamente presentados, se puede observar que entre quienes presentan un alto nivel de apoyo a la democracia predomina la percepción de que el país está estancado (51,3%), seguida por la idea de que se encuentra en progreso (31,9%). Por el contrario, entre quienes presentan un apoyo medio a la democracia, un 44,5% opina que el país está en retroceso. Finalmente, en el grupo con bajo apoyo democrático también prevalece la percepción de estancamiento, con un 46,4%, seguida por el 42,5% que considera que el país está en retroceso.
 
 ```{r}
 #| label: Gráfico percepción situación países según nivel de apoyo a la democracia
@@ -540,9 +540,9 @@ ggplotly(demo_sit, tooltip = "text")
 
 El siguiente árbol de decisión busca clasificar y caracterizar a las personas según su nivel de apoyo a la democracia (P11STGBS) según variables de participación política, percepciones cívicas e institucionales y características sociodemográficas.
 
-Se puede observar que la creencia sobre la eficacia del voto (P26ST) es la variable más relevante entre todas las seleccionadas. En este sentido, quienes creen que su voto puede cambiar el futuro muestran un nivel de apoyo más alto, reforzándose aún más si no perciben que el país está retorcediendo (P2ST) y si no tienen altas percepciones de corrupción (P54N).
+Se puede observar que la creencia sobre la eficacia del voto (P26ST) es la variable más relevante entre todas las seleccionadas. En este sentido, quienes creen que su voto puede cambiar el futuro muestran un nivel de apoyo más alto, reforzándose aún más si no perciben que el país está retorcediendo (P2ST) y si no tienen altas percepciones de corrupción (P54N). Adicionalmente, se evidencia que el nivel de apoyo a la democracia también se podría explicar con variables como el sexo, la clase social percibida (S2) y los lugares donde se expresa la opinión sobre el país (P44ST).
 
-Adicionalmente, se evidencia que el nivel de apoyo a la democracia también se podría explicar con variables como el sexo, la clase social percibida (S2) y los lugares donde se expresa la opinión sobre el país (P44ST).
+En este sentido, entre quienes consideran que su voto puede cambiar el futuro y no perciben que el país está retrocediendo, representando el 60% de la muestra, el 84% considera que la democracia es preferible a cualquier otra forma de gobierno. Contrariamente, entre quienes no creen que la manera en la cual se vota influyen en el futuro y consideran que la situación del país está retorcediendo, que son cerca del 10% de la muestra, se observa la preferencia por el posicionamiento que ""En algunas circunstancias, un gobierno autoritario puede ser preferible a uno democrático".
 
 ```{r}
 #| label: Árbol de decisión
@@ -708,7 +708,7 @@ Con base en el análisis previamente ejecutado, se puede concluir que en Chile l
 
 Dentro de las 14 variables consideradas, la que ejerce mayor influencia en el nivel de apoyo a la democracia de las personas es la percepción de influencia del voto en el futuro. Es decir, las personas que sienten que la manera en la cual se vota sí puede generar un cambio, tienen mayor probabilidad de presentar un alto nivel de apoyo a la democracia. A esta variable se suman otras relevantes, como la percepción de la situación del país, la percepción de corrupción y, con menor importancia relativa, el sexo, la clase social percibida y los espacios en los cuales se expresa la opinión (familia, amigos, manifestaciones, redes sociales, o si no las expresan).
 
-En este sentido, quienes muestran un alto nivel de apoyo a la democracia consideran: que la manera en la que se vota sí puede generar un cambio a futuro; que tienen una mejor percepción de la situación de país (en progreso o estancado) y no perciben niveles de corrupción extremadamente altos.
+En este sentido, quienes muestran un alto nivel de apoyo a la democracia consideran: que la manera en la que se vota sí puede generar un cambio a futuro, tienen una mejor percepción de la situación de país (en progreso o estancado) y no perciben niveles de corrupción extremadamente altos. Asimismo, quienes presentan un bajo nivel de apoyo a la democracia tienden a considerar que la manera de votar no influye en el futuro y que el país está en retroceso. 
 
 Para futuras mejoras y continuidades del proyecto, se recomienda incorporar variables adicionales que permitan una medición más precisa del nivel de apoyo a la democracia, así como analizar más indicadores de participación política, percepciones cívicas e institucionales y sociodemográficas que aporten a una caracterización más completa de las personas según su nivel de apoyo. Finalmente, sería interesante aplicar el modelo a las bases de datos de otros países analizados por Latinobarómetro, con el propósito de comparar patrones y características de apoyo democrático en la región.
 
