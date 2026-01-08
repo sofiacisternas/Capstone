@@ -491,7 +491,7 @@ ggplotly(demo_pol, tooltip = "text")
 ```
 
 <br> 
-En contraste a los gráficos previamente presentados, se puede observar que entre quienes presentan un alto nivel de apoyo a la democracia predomina la percepción de que el país está estancado (51,3%), seguida por la idea de que se encuentra en progreso (31,9%). Por el contrario, entre quienes presentan un apoyo medio a la democracia, un 44,5% opina que el país está en retroceso. Finalmente, en el grupo con bajo apoyo democrático también prevalece la percepción de estancamiento, con un 46,4%, seguida por el 42,5% que considera que el país está en retroceso.
+En contraste a los gráficos previamente presentados, se puede observar que entre quienes presentan un alto nivel de apoyo a la democracia predomina la percepción de que el país está estancado (51,3%), seguida por la idea de que se encuentra en progreso (31,9%). Por el contrario, entre quienes presentan un apoyo medio y bajo a la democracia, parte significativa considera que el país está estancado (45,7% y 46,4% respectivamente), ambas seguida por la percepción que está en retorceso (44,5% y 42,5% respectivamente).
 
 ```{r}
 #| label: Gráfico percepción situación países según nivel de apoyo a la democracia
