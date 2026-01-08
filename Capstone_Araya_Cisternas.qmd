@@ -82,6 +82,8 @@ Identificar y analizar las diferentes características personales que permiten c
 
 A fin de caracterizar a las personas según su nivel de apoyo a la democracia, se utilizará el estudio de opinión pública desarrollado por Latinobarómetro en su versión correspondiente al año 2024, específicamente la base de datos que únicamente contiene la información de Chile.
 
+Este estudio anualmente aplica cerca de 20.000 entrevista en 18 países de América Latina. La recolección de información en Chile se realizó entre el 23 de agosto y el 13 de septiembre cara a cara, aplicando una muestra de 1.200 casos seleccionados mediante un método probabilístico trietápico, aplicando cuotas en la tercera etapa (Latinobarómetro, 2024).
+
 ```{r}
 #| label: Cargar base de datos
 
@@ -136,7 +138,7 @@ base <- limpieza %>%
 
 ## Variables del modelo
 
-Con el propósito de medir el nivel de apoyo a la democracia, la participación política, las percepciones cívicas e institucionales y las características sociodemográficas de las personas, se utilizarán las variables descritas a continuación:
+Con el propósito de medir el nivel de apoyo a la democracia, la participación política, las percepciones cívicas e institucionales y las características sociodemográficas de las personas, se seleccionaron 14 variables, considerando los índice de medición que utiliza IDEA Internacional para medir el estado global de la democracia, descritas a continuación:
 
 ### Variable dependiente
 
@@ -144,27 +146,27 @@ Con el propósito de medir el nivel de apoyo a la democracia, la participación 
 
 ### Variables independientes
 
-#### Participación política
+#### **Participación política**
 
 -   P26ST. "¿Cuál frase está más cerca de su manera de pensar?" (La manera como uno vota puede hacer que las cosas sean diferentes en el futuro = 1, No importa cómo uno vote, no hará que las cosas sean mejor en el futuro = 2)
 -   P38STGBS. "¿Hay algún partido político hacia el cual se sienta usted más cercano que hacia el resto de los partidos?" (Sí = 1, No = 2)
 -   P44ST. "¿Dónde suele Ud. expresar sus opiniones sobre los problemas del país o Ud. no suele hacerlo?" (Manifestación/protesta = 1, Redes sociales = 2, Entre amigos = 3, En familia = 4, No suelo hacerlo = 5)
 -   P36STGBS. "¿Cuán interesado está Ud. en la política?" (Muy interesado = 1, Algo interesado = 2, Poco interesado = 3, Nada interesado = 4)
 
-#### Percepciones cívicas / institucionales
+#### **Percepciones cívicas / institucionales**
 
 -   P2ST. "¿Diría Ud. que este país...?" (Está progresando = 1, Está estancado = 2, Está en retroceso = 3)
 -   P54N. "En una escala donde 00 es para nada corrupto y 10 totalmente corrupto, ¿cuán corrupto cree Ud. que es el país?" (Escala 00–10)
 -   P25ST. "¿Usted se siente políticamente representado en el parlamento/congreso?" (Sí = 1, No = 2)
 -   P17ST. "¿Cuán justa cree Ud. que es la distribución del ingreso en el país?" (Muy justa = 1, Justa = 2, Injusta = 3, Muy injusta = 4)
 
-#### Sociodemográficas
+#### **Sociodemográficas**
 
 -   P16ST. "En una escala donde 00 es izquierda y 10 es derecha, ¿dónde se ubicaría Ud.?" (Escala 00–10)
 -   S1. "¿Cuál es su religión?" (Respuesta abierta)
 -   S2. "¿Ud. se describiría como perteneciendo a la clase...? (Alta = 1, Media alta = 2, Media = 3, Media baja = 4, Baja = 5)
--   "Recodificación Edad" (16-25 = 1, 26-40 = 2, 41-60 = 3, 61 y más = 4)
--   "Sexo" (Hombre = 1, Mujer = 2)
+-   REEDAD "Recodificación de edad en rangos" (16-25 = 1, 26-40 = 2, 41-60 = 3, 61 y más = 4)
+-   Sexo (Hombre = 1, Mujer = 2)
 
 ```{r}
 #| label: Asignación de etiquetas a valores
@@ -233,7 +235,7 @@ base <- base %>%
 
 # Análisis exploratorio y descriptivo
 
-En primer lugar, para poder analizar las variables y su distribución, es necesario realizar una serie de modificaciones, a fin de facilitar el tratamiento de los datos y de interpretación de resultados.
+Previo al análisis exploratorio y descriptivo de los datos, es necesario realizar una serie de transformaciones a las variables por utilizar, con el propósito de facilitar el procesamiento e interpretación de los datos. 
 
 ```{r}
 #| label: Primera visualización base final
@@ -245,7 +247,7 @@ skim(base)
 
 ## Modificación de variables
 
-Para realizar el análisis deseado, en primer lugar se asigna como valor perdido todos aquellos casos en los cuales se contemple los números -5, -2 y -1. Adicionalmente, en la variable P16ST también se asigna como valor perdido en número 97. Esto se debe a que en la variable de religión, este valor corresponde a aquellas personas que establecieron no identificarse con ninguna religión.
+Para realizar el análisis deseado, en primer lugar se asigna como valor perdido todos aquellos casos en los cuales se contemple los números -5, -2 y -1. Adicionalmente, en la variable P16ST también se asigna como valor perdido en número 97. Esto se debe a que en la variable de religión, este valor corresponde a aquellas personas que establecieron no identificarse con ninguna religión y, por tanto, no se podrá incorporar al código general aplicable a todas las variables.
 
 Asimismo, la variable P16ST (espectro político) es recodificada para categorizarse en tres valores principales y facilitar el análisis, donde los valores del 0 al 3 expresan una representación en el espectro político con tendencia izquierdista, los valores del 4 al 6 una tendencia más de centro, y los valores del 7 al 10 como una identificación de tendencia hacia la derecha.
 
@@ -297,7 +299,9 @@ df <- base %>%
 
 ## Distribución de variables
 
-En la siguiente sección se presenta un análisis descriptivo de algunas de las variables a utilizar, para comprender cómo se distribuyen las distintas observaciones.
+En la siguiente sección se presenta un análisis descriptivo de la variable de respuesta (P11STGBS), 2 sociodemográficas (sexo y rango etario), 1 de participación política (P36STGBS) y 1 de percepciones cívicas e institucionales (P2ST). Las variables de participación y percepción se seleccionaron debido a que miden un aspecto más amplio de su respectiva categoría.
+
+algunas de las variables a utilizar, para comprender cómo se distribuyen las distintas observaciones. Las variables utilziadas en la presente sección se seleccionaron 2 correspondientes al conjunto sociodemográfico, 1 de participación política y 1 de percepciones cívicas e institucionales. 
 
 En primer lugar, se puede observar que la mayoría de las personas encuestadas (817 de 1.165) presentan un alto nivel de apoyo a la democracia, mientras que el nivel con menos cantidad de respuestas corresponde a un apoyo bajo. Asimismo, se evidencia una distribución similar entre sexos, donde la diferencia es de 29 casos, favoreciendo a las mujeres; y que existe una mayor concentración en los rangos etarios de 26 a 40 años y de 41 a 60 años. En tanto, son pocas las personas que declaran estar altamente interesadas en la política; y un porcentaje significativo de personas considera que el país se encuentra estancado. 
 <br><br> 
@@ -360,7 +364,7 @@ t4
 ```
 
 <br> 
-***Distribución por percpeción de progeso del país***
+***Distribución por percepción de progeso del país***
 
 ```{r}
 #Tabla
@@ -714,7 +718,8 @@ Para futuras mejoras y continuidades del proyecto, se recomienda incorporar vari
 
 # Referencias
 
--   Centro de Estudio Públicos. (2025). *Encuesta CEP N°95, Septiembre - Octubre 2025.* https://static.cepchile.cl/uploads/cepchile/2025/10/13-113839_vwlh_ppt95_conferencia_OP_con-anexo_VF_29102025.pdf
--   IDEA Internacional. (s.f.). *Chile.* https://www.idea.int/democracytracker/country/chile
--   IDEA Internacional. (2025). *The Global State of Democracy 2025: Democracy on the Move.* https://www.idea.int/publications/catalogue/global-state-of-democracy-2025-democracy-on-the-move?lang=en
--   Universidad de Chile. (2025). *Los ejes del debate sobre la democracia: Deterioro global y crisis del “delivery”.* https://gobierno.uchile.cl/noticias/233404/los-ejes-del-debate-sobre-la-democracia-deterioro-global-y-crisis
+- Centro de Estudio Públicos. (2025). *Encuesta CEP N°95, Septiembre - Octubre 2025.* https://static.cepchile.cl/uploads/cepchile/2025/10/13-113839_vwlh_ppt95_conferencia_OP_con-anexo_VF_29102025.pdf
+- IDEA Internacional. (s.f.). *Chile.* https://www.idea.int/democracytracker/country/chile
+- IDEA Internacional. (2025). *The Global State of Democracy 2025: Democracy on the Move.* https://www.idea.int/publications/catalogue/global-state-of-democracy-2025-democracy-on-the-move?lang=en
+- Latinobarómetro. (2024). *Latinobarómetro 2024: Datos y Documentación.* https://www.latinobarometro.org/latinobarometro-2024
+- Universidad de Chile. (2025). *Los ejes del debate sobre la democracia: Deterioro global y crisis del “delivery”.* https://gobierno.uchile.cl/noticias/233404/los-ejes-del-debate-sobre-la-democracia-deterioro-global-y-crisis
