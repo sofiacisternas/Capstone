@@ -173,8 +173,8 @@ base <- base %>%
   set_value_labels(
     P11STGBS = c(
       "Alto" = 1,
-      "Bajo" = 2,
-      "Medio" = 3),
+      "Medio" = 2,
+      "Bajo" = 3),
     
     P26ST = c(
       "El voto puede cambiar las cosas" = 1,
@@ -253,9 +253,9 @@ Por otra parte, la variable S1 (identificación religiosa) se recodifica a fin d
 
 Finalmente, cabe establecer que, si bien la variable que se utilizará para calcular el nivel de apoyo a la democracia no es recodificada ni se le asignan nuevas etiquetas, sus valores (1 al 3) se interpretarán de la siguiente manera:
 
--   Nivel Alto = 1 "La democracia es preferible a cualquier otra forma de gobierno"
--   Nivel Medio = 3 "A la gente como uno le da lo mismo un régimen democrático que uno no democrático"
--   Nivel Bajo = 2 "En algunas circunstancias, un gobierno autoritario puede ser preferible a uno democrático"
+- Nivel Alto = 1 "La democracia es preferible a cualquier otra forma de gobierno"
+- Nivel Medio = 2 "En algunas circunstancias, un gobierno autoritario puede ser preferible a uno democrático"
+- Nivel Bajo = 3 "A la gente como uno le da lo mismo un régimen democrático que uno no democrático"
 
 ```{r}
 #| label: Recodificación
@@ -304,7 +304,7 @@ En primer lugar, se puede observar que la mayoría de las personas encuestadas (
 ```{r}
 #Tabla
 t1 <- data.frame(
-  Categoria = c("Alto", "Bajo", "Medio"),
+  Categoria = c("Alto", "Medio", "Bajo"),
   Frecuencia = as.vector(table(df$P11STGBS)),
   Porcentaje = round(100 * as.vector(table(df$P11STGBS)) / length(df$P11STGBS), 1)
 )
@@ -381,7 +381,7 @@ demo_sexo <- df %>%
   summarise(Conteo = n(), .groups = "drop") %>%
   group_by(P11STGBS) %>%
   mutate(Porcentaje = Conteo / sum(Conteo) * 100,
-         P11STGBS = factor(P11STGBS, levels = c(1, 2, 3), labels = c("Alto", "Bajo", "Medio")),
+         P11STGBS = factor(P11STGBS, levels = c(1, 2, 3), labels = c("Alto", "Medio", "Bajo")),
          SEXO = factor(SEXO, levels = c(1, 2), labels = c("Hombre", "Mujer"))) %>%  
   ggplot(aes(x = P11STGBS, y = Porcentaje, fill = SEXO)) +
   geom_bar(stat = "identity", position = "fill", color = "black") +  
@@ -419,7 +419,7 @@ demo_edad <- df %>%
   summarise(Conteo = n(), .groups = "drop") %>%
   group_by(P11STGBS) %>%
   mutate(Porcentaje = Conteo / sum(Conteo) * 100,
-         P11STGBS = factor(P11STGBS, levels = c(1, 2, 3), labels = c("Alto", "Bajo", "Medio")),
+         P11STGBS = factor(P11STGBS, levels = c(1, 2, 3), labels = c("Alto", "Medio", "Bajo")),
          REEDAD = factor(REEDAD, levels = c(1, 2, 3, 4), labels = c("16-25", "26-40", "41-60", "61+"))) %>%  
   ggplot(aes(x = P11STGBS, y = Porcentaje, fill = REEDAD)) +
   geom_bar(stat = "identity", position = "fill", color = "black") +  
@@ -458,7 +458,7 @@ demo_pol <- df %>%
   summarise(Conteo = n(), .groups = "drop") %>%
   group_by(P11STGBS) %>%
   mutate(Porcentaje = Conteo / sum(Conteo) * 100,
-         P11STGBS = factor(P11STGBS, levels = c(1, 2, 3), labels = c("Alto", "Bajo", "Medio")),
+         P11STGBS = factor(P11STGBS, levels = c(1, 2, 3), labels = c("Alto", "Medio", "Bajo")),
          P36STGBS = factor(P36STGBS, levels = c(1, 2, 3, 4), labels = c("Muy interesado", "Algo interesado",
                                                                         "Poco interesado", "Nada interesado"))) %>%  
   ggplot(aes(x = P11STGBS, y = Porcentaje, fill = P36STGBS)) +
@@ -498,7 +498,7 @@ demo_sit <- df %>%
   summarise(Conteo = n(), .groups = "drop") %>%
   group_by(P11STGBS) %>%
   mutate(Porcentaje = Conteo / sum(Conteo) * 100,
-         P11STGBS = factor(P11STGBS, levels = c(1, 2, 3), labels = c("Alto", "Bajo", "Medio")),
+         P11STGBS = factor(P11STGBS, levels = c(1, 2, 3), labels = c("Alto", "Medio", "Bajo")),
          P2ST = factor(P2ST, levels = c(1, 2, 3), labels = c("Está progresando", "Está estancado",
                                                                         "Está en retroceso"))) %>%  
   ggplot(aes(x = P11STGBS, y = Porcentaje, fill = P2ST)) +
