@@ -253,7 +253,7 @@ Asimismo, la variable P16ST (espectro político) es recodificada para categoriza
 
 Por otra parte, la variable S1 (identificación religiosa) se recodifica a fin de agrupar a las personas en dos categorías: identificación religiosa y sin identificación religiosa.
 
-Finalmente, cabe establecer que, si bien la variable que se utilizará para calcular el nivel de apoyo a la democracia no es recodificada ni se le asignan nuevas etiquetas, sus valores (1 al 3) se interpretarán de la siguiente manera:
+Finalmente, cabe establecer que, si bien la variable que se utilizará para calcular el nivel de apoyo a la democracia no es modificada, sus valores (1 al 3) se interpretarán de la siguiente manera:
 
 - Nivel Alto = 1 "La democracia es preferible a cualquier otra forma de gobierno"
 - Nivel Medio = 2 "En algunas circunstancias, un gobierno autoritario puede ser preferible a uno democrático"
@@ -301,8 +301,6 @@ df <- base %>%
 
 En la siguiente sección se presenta un análisis descriptivo de la variable de respuesta (P11STGBS), 2 sociodemográficas (sexo y rango etario), 1 de participación política (P36STGBS) y 1 de percepciones cívicas e institucionales (P2ST). Las variables de participación y percepción se seleccionaron debido a que miden un aspecto más amplio de su respectiva categoría.
 
-algunas de las variables a utilizar, para comprender cómo se distribuyen las distintas observaciones. Las variables utilziadas en la presente sección se seleccionaron 2 correspondientes al conjunto sociodemográfico, 1 de participación política y 1 de percepciones cívicas e institucionales. 
-
 En primer lugar, se puede observar que la mayoría de las personas encuestadas (817 de 1.165) presentan un alto nivel de apoyo a la democracia, mientras que el nivel con menos cantidad de respuestas corresponde a un apoyo bajo. Asimismo, se evidencia una distribución similar entre sexos, donde la diferencia es de 29 casos, favoreciendo a las mujeres; y que existe una mayor concentración en los rangos etarios de 26 a 40 años y de 41 a 60 años. En tanto, son pocas las personas que declaran estar altamente interesadas en la política; y un porcentaje significativo de personas considera que el país se encuentra estancado. 
 <br><br> 
 ***Distribución por nivel de apoyo a la democracia***
@@ -317,11 +315,9 @@ t1 <- data.frame(
 #Visualización
 t1
 ```
-
 <br>
 
 ***Distribución por sexo***
-
 ```{r}
 #Tabla
 t2 <-  data.frame(
@@ -333,9 +329,9 @@ t2 <-  data.frame(
 #Visualización
 t2
 ```
+<br>
 
-<br> ***Distribución por rango etario***
-
+***Distribución por rango etario***
 ```{r}
 #Tabla
 t3 <- data.frame(
@@ -347,10 +343,9 @@ t3 <- data.frame(
 #Visualización
 t3
 ```
-
 <br> 
-***Distribución por interés en la política***
 
+***Distribución por interés en la política***
 ```{r}
 #Tabla
 t4 <- data.frame(
@@ -362,10 +357,9 @@ t4 <- data.frame(
 #Visualización
 t4
 ```
-
 <br> 
-***Distribución por percepción de progeso del país***
 
+***Distribución por percepción de progeso del país***
 ```{r}
 #Tabla
 t5 <- data.frame(
@@ -378,7 +372,8 @@ t5 <- data.frame(
 t5
 ```
 
-<br> 
+## Distribución de variables según nivel de apoyo a la democracia
+
 En cambio, al observar la distribución de dichas variables independientes en relación con su nivel de apoyo a la democracia se puede apreciar que, hay más mujeres que hombres entre quienes presentan tanto un alto como bajo compromiso con la democracia, representando un 52,9% y 50,8% respectivamente. Al contrario, los hombres concentran el 56,4% de los casos entre quienes presentan un nivel medio de apoyo a la democracia.
 
 ```{r}
