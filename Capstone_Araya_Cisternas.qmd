@@ -22,7 +22,7 @@ format:
 ---
 
 ```{r}
-#| label: Liberías
+#| label: Librerías
 #| include: FALSE
 rm(list = ls())
 
@@ -42,7 +42,7 @@ library(labelled)
 
 # Problematización
 
-El Instituto Internacional para la Democracia y la Asistencia Electoral (IDEA Internacional) evalúa el desempeño democrático de 173 países a lo largo de los años por medio de la medición de diversos indicadores ligados al Estado de Derecho, la representación, participación y a los derechos humanos. Dichos indicadores se categorizan y contemplan los siguientes factores (IDEA Internacional, 2025):
+El Instituto Internacional para la Democracia y la Asistencia Electoral (IDEA Internacional) evalúa el desempeño democrático de 173 países a lo largo de los años por medio de la medición de 154 indicadores ligados al Estado de Derecho, la representación, participación y a los derechos humanos. Dichos indicadores se categorizan y contemplan los siguientes factores (IDEA Internacional, 2025):
 
 ```{r}
 #| label: Indicadores de rendimiento democrático
