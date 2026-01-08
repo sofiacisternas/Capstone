@@ -543,6 +543,7 @@ En este sentido, entre quienes consideran que su voto puede cambiar el futuro y 
 
 ```{r}
 #| label: Árbol de decisión
+#| results: hide
 
 set.seed(15097)
 
