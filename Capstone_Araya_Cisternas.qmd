@@ -138,11 +138,11 @@ base <- limpieza %>%
 
 Con el propósito de medir el nivel de apoyo a la democracia, la participación política, las percepciones cívicas e institucionales y las características sociodemográficas de las personas, se seleccionaron 14 variables, considerando los índice de medición que utiliza IDEA Internacional para medir el estado global de la democracia, descritas a continuación:
 
-### Variable dependiente
+### Variable de respuesta
 
 -   P11STGBS. "¿Con cuál de las siguientes frases está Ud. más de acuerdo?" (La democracia es preferible a cualquier otra forma de gobierno = 1, En algunas circunstancias, un gobierno autoritario puede ser preferible a uno democrático = 2, A la gente como uno le da lo mismo un régimen democrático que uno no democrático = 3)
 
-### Variables independientes
+### Variables de input
 
 #### **Participación política**
 
@@ -643,10 +643,6 @@ crf.df <- cforest(
   
   data = df
 )
-```
-
-```{r}
-#| label: Resultado random forest
 
 crf.df
 ```
@@ -659,12 +655,8 @@ crf.df.prob <- predict(crf.df, newdata = df, type = "prob")
 dim(crf.df.prob)
 
 head(crf.df.prob)
-```
 
-```{r}
-#| label: Matriz y promedio probabilidades
-#| results: hide
-
+#Matriz y promedio probabilidades
 crf.prob <- matrix(unlist(crf.df.prob), ncol = 3, byrow = TRUE)
 head(crf.prob)
 
