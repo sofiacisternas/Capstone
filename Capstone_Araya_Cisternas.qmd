@@ -71,7 +71,7 @@ Por tanto, se vuele relevante analizar cómo se caracterizan las personas según
 
 # Pregunta de análisis
 
-Considerando el contexto global de deterioro democrático y la combinación en Chile de altos niveles de desempeño democrático con bajos niveles de confianza institucional, surge la siguiente pregunta de investigación: ¿De qué manera las características sociodemográficas, los niveles de participación política y las percepciones ciudadanas e institucionales ayudan a predecir el nivel de apoyo a la democracia de las personas en Chile mediante un modelo de Random Forest?
+Considerando el contexto global de deterioro democrático y la combinación en Chile de altos niveles de desempeño democrático con bajos niveles de confianza institucional, surge la siguiente pregunta de investigación: ¿De qué manera las características sociodemográficas, los niveles de participación política y las percepciones ciudadanas e institucionales ayudan a predecir el nivel de apoyo a la democracia de las personas en Chile?
 
 # Objetivo general del proyecto
 
@@ -79,7 +79,7 @@ Identificar y analizar las diferentes características personales que permiten c
 
 # Fuente de datos y variables a utilizar
 
-A fin de caracterizar a las personas según su nivel de apoyo a la democracia, se utilziará el estudio de opinión pública desarrollado por Latinobarómetro en su versión correspondiente al año 2024, específicamente la base de datos que únicamente contiene la información de Chile.
+A fin de caracterizar a las personas según su nivel de apoyo a la democracia, se utilizará el estudio de opinión pública desarrollado por Latinobarómetro en su versión correspondiente al año 2024, específicamente la base de datos que únicamente contiene la información de Chile.
 
 ```{r}
 #| label: Cargar base de datos
@@ -138,7 +138,7 @@ base <- limpieza %>%
 Con el propósito de medir el nivel de apoyo a la democracia, la participación política, las percpeciones cívicas e institucionales y las características sociodemográficas de las personas, se utilizaran las variables descritas a continuación:
 
 ### Variable dependiente
-P11STGBS. "¿Con cuál de las siguientes frases está Ud. más de acuerdo?" (La democracia es preferible a cualquier otra forma de gobierno = 1, En algunas circunstancias, un gobierno autoritario puede ser preferible a uno democrático = 2, A la gente como uno le da lo mismo un régimen democrático que uno no democrático = 3)
+- P11STGBS. "¿Con cuál de las siguientes frases está Ud. más de acuerdo?" (La democracia es preferible a cualquier otra forma de gobierno = 1, En algunas circunstancias, un gobierno autoritario puede ser preferible a uno democrático = 2, A la gente como uno le da lo mismo un régimen democrático que uno no democrático = 3)
 
 ### Variables independientes
 #### Participación política
@@ -492,7 +492,7 @@ demo_sit <- df %>%
   geom_bar(stat = "identity", position = "fill", color = "black") +  
   coord_flip() + 
   labs(
-    title = "Apoyo a la democracia por opinión país",
+    title = "Percepción de la situación del país según nivel de apoyo a la democracia",
     x = "Apoyo a la democracia",  
     y = "Porcentaje",
     fill = "Opinión país"
@@ -519,9 +519,9 @@ ggplotly(demo_sit, tooltip = "text")
 ## Árbol de decisión
 El siguiente árbol de decisión busca clasificar y caracterizar a las personas según su nivel de apoyo a la democracia (P11STGBS) según variables de participación política, percepciones cívicas e institucionales y características sociodemográficas. 
 
-Se puede observar que la creencia sobre la eficacia del voto (P26ST) es la variable más relevante entre todas las seleccionadas. En este sentido, entre quienes creen que su voto puede cambiar el futuro muestran un nivel de apoyo más alto, reforzándose aún más si no perciben que el país está retorcediendo (P2ST), además de tener cierto perfil respecto a los espacios en los cuales expresan su opinión sobre el país (P44ST).
+Se puede observar que la creencia sobre la eficacia del voto (P26ST) es la variable más relevante entre todas las seleccionadas. En este sentido, entre quienes creen que su voto puede cambiar el futuro muestran un nivel de apoyo más alto, reforzándose aún más si no perciben que el país está retorcediendo (P2ST) y si no tienen altas percepciones de corrupción (P54N). 
 
-Adicionalmente, se evidencia que el nivel de apoyo a la democracia también se podría explicar con variables como el sexo, la clase social percibida (S2), los lugares donde se expresa la opinión sobre el país (P44ST) y la percepción de corrupción (P54N).
+Adicionalmente, se evidencia que el nivel de apoyo a la democracia también se podría explicar con variables como el sexo, la clase social percibida (S2) y los lugares donde se expresa la opinión sobre el país (P44ST).
 
 ```{r}
 #| label: Árbol de decisión
@@ -587,8 +587,11 @@ prp(ar, main = "Nivel de apoyo a la democracia",
 
 ## Random forest
 
+Al ejecutar un modelo de Random Forest, se puede apreciar que cerca del 70% de las observaciones pueden clasificarse como de alto nivel de apoyo a la democracia. Este grupo demuestra que existen consistencias entrelos niveles de participación política, percepciones cívicas e institucionales y en ciertas características sociodemográficas que ayudan a predecir el nivel de apoyo a la democracia.
+
 ```{r}
 #| label: Random forest
+#| results: hide 
 
 df$P11STGBS <- as.factor(df$P11STGBS)
 
@@ -621,21 +624,28 @@ crf.df <- cforest(
   
   data = df
 )
+```
+
+```{r}
+#| label: Resultado random forest
 
 crf.df
 ```
 
 ```{r}
+#| label: Probabilidades
+#| results: hide
+
 crf.df.prob <- predict(crf.df, newdata = df, type = "prob")
 dim(crf.df.prob)
-```
 
-```{r}
 head(crf.df.prob)
 ```
 
-
 ```{r}
+#| label: Matriz y promedio probabilidades
+#| results: hide
+
 crf.prob <- matrix(unlist(crf.df.prob), ncol = 3, byrow = TRUE)
 head(crf.prob)
 
@@ -643,18 +653,22 @@ apply(crf.prob,2,mean)
 ```
 
 ```{r}
+#| label: Predicción con Rpart
+#| results: hide
+
 rpart.prob <- predict(ar, newdata = df,type = "prob")
 head(rpart.prob)
 ```
 
 ```{r}
-out <- data.frame(rpart = rpart.prob[,2],
-cforest = crf.prob[,2],
+#| label: Comparado modelos
+#| results: hide
+
+out <- data.frame(rpart = rpart.prob[,1],
+cforest = crf.prob[,1],
 class = ar$where)
 names(out)
-```
 
-```{r}
 out%>%
   group_by(class)%>%
   summarise(rpart = mean(rpart),
@@ -662,10 +676,21 @@ out%>%
 ```
 
 ```{r}
+#| label: Gráfico modelos
+
 ggplot(out, aes(x = rpart, y = cforest)) + geom_point()
 ```
 
+
 # Conclusiones y recomendaciones
+
+Con base en el análisis previamente ejecutado, se puede concluir que en Chile la mayoría de las personas opinan que "La democracia es preferible a cualquier otra forma de gobierno", representado cerca del 70% de los casos analizados en el estudio de opinión pública desarrollado por Latinobarómetro en su versión correspondiente al año 2024.
+
+Dentro de las 14 variables consideradas, la que que ejerce mayor influencia en el nivel de apoyo a la democracia de las personas es la percepción de influencia del voto en el futuro. Es decir, las personas que sienten que la manera en la cual se vota si puede generar un cambio tienen mayor probabilidad de presentar un alto nivel de apoyo a la democracia. A esta variable se suman otras relevantes, como la percepción de la situación del país, la percepción de corrupción y, con menor importancia relativa, el sexo, la clase social percibida y los espacios en los cuales se expresa la opinión (familia, amigos, manifestaciones, redes sociales, o si no las expresan).
+
+En este sentido, quienes muestran un alto nivel de apoyo a la democracia consideran que la manera en la que se vota si puede generar un cambio a futuro, tienen una mejor percepción de la situación de país (progesando o estancado) y no perciben nivel de corrupción extremadamente altos.
+
+Para futuras mejoras y continuidades del proyecto, se recomienda incorporar variables adicionales que permitan una medición más precisa del nivel de apoyo a la democracia, así como analizar más indicadores de participación política, percepciones cívicas e institucionales y sociodemográficas que aporten a una caracterización más completa de las personas según su nivel de apoyo. Finalmente, sería interensante aplicar el modelo a las bases de datos de otros países analizados por Latinobarómetro, con el propósito de comparar patrones y características de apoyo democrático en la región.
 
 # Referencias
 
