@@ -233,7 +233,7 @@ base <- base %>%
 
 # Análisis exploratorio y descriptivo
 
-En primer lugar, para poder analizar las variables y su distribución, es necesario realizar una serie de modificaciones, a fin de facilitar el tratamiento de los datos y de interpretación de resultados. \## Observación inicial de base filtrada
+En primer lugar, para poder analizar las variables y su distribución, es necesario realizar una serie de modificaciones, a fin de facilitar el tratamiento de los datos y de interpretación de resultados.
 
 ```{r}
 #| label: Primera visualización base final
@@ -299,8 +299,9 @@ df <- base %>%
 
 En la siguiente sección se presenta un análisis descriptivo de algunas de las variables a utilizar, para comprender cómo se distribuyen las distintas observaciones.
 
-En primer lugar, se puede observar que la mayoría de las personas encuestadas (817 de 1.165) presentan un alto nivel de apoyo a la democracia, mientras que el nivel con menos cantidad de respuestas corresponde a un apoyo bajo. Asimismo, se evidencia una distribución similar entre sexos, donde la diferencia es de 29 casos, favoreciendo a las mujeres; y que existe una mayor concentración en los rangos etarios de 26 a 40 años y de 41 a 60 años. En tanto, son pocas las personas que declaran estar altamente interesadas en la política; y un porcentaje significativo de personas considera que el país se encuentra estancado. <br><br> ***Distribución por nivel de apoyo a la democracia***
-
+En primer lugar, se puede observar que la mayoría de las personas encuestadas (817 de 1.165) presentan un alto nivel de apoyo a la democracia, mientras que el nivel con menos cantidad de respuestas corresponde a un apoyo bajo. Asimismo, se evidencia una distribución similar entre sexos, donde la diferencia es de 29 casos, favoreciendo a las mujeres; y que existe una mayor concentración en los rangos etarios de 26 a 40 años y de 41 a 60 años. En tanto, son pocas las personas que declaran estar altamente interesadas en la política; y un porcentaje significativo de personas considera que el país se encuentra estancado. 
+<br><br> 
+***Distribución por nivel de apoyo a la democracia***
 ```{r}
 #Tabla
 t1 <- data.frame(
@@ -343,7 +344,8 @@ t3 <- data.frame(
 t3
 ```
 
-<br> ***Distribución por interés en la política***
+<br> 
+***Distribución por interés en la política***
 
 ```{r}
 #Tabla
@@ -357,7 +359,8 @@ t4 <- data.frame(
 t4
 ```
 
-<br> ***Distribución por percpeción de progeso del país***
+<br> 
+***Distribución por percpeción de progeso del país***
 
 ```{r}
 #Tabla
@@ -371,7 +374,8 @@ t5 <- data.frame(
 t5
 ```
 
-<br> En cambio, al observar la distribución de dichas variables independientes en relación con su nivel de apoyo a la democracia se puede apreciar que, hay más mujeres que hombres entre quienes presentan tanto un alto como medio compromiso con la democracia, representando un 52,9% y 50,8% respectivamente. Al contrario, los hombres concentran el 56,4% de los casos entre quienes presentan un bajo nivel de apoyo a la democracia.
+<br> 
+En cambio, al observar la distribución de dichas variables independientes en relación con su nivel de apoyo a la democracia se puede apreciar que, hay más mujeres que hombres entre quienes presentan tanto un alto como medio compromiso con la democracia, representando un 52,9% y 50,8% respectivamente. Al contrario, los hombres concentran el 56,4% de los casos entre quienes presentan un bajo nivel de apoyo a la democracia.
 
 ```{r}
 #| label: Gráfico sexo según nivel de apoyo a la democracia
@@ -409,7 +413,8 @@ demo_sexo <- df %>%
 ggplotly(demo_sexo, tooltip = "text")
 ```
 
-<br> Al analizar los rangos etarios según el nivel de apoyo a la democracia, se puede observar que no existe una tendencia claramente diferenciada entre los grupos, pues en los tres niveles la distribución de los rangos es similar.
+<br> 
+Al analizar los rangos etarios según el nivel de apoyo a la democracia, se puede observar que no existe una tendencia claramente diferenciada entre los grupos, pues en los tres niveles la distribución de los rangos es similar.
 
 ```{r}
 #| label: Gráfico rango etario según nivel de apoyo a la democracia
@@ -447,7 +452,8 @@ demo_edad <- df %>%
 ggplotly(demo_edad, tooltip = "text")
 ```
 
-<br> En cuanto al nivel de interés en la política, el gráfico evidencia que, gran parte de quienes presentan un apoyo medio a la democracia no están nada interesados en la política, representando el 53%. En cambio, existe una concentración similar entre los niveles Alto y Bajo de quienes declaran estar algo y poco interesados.
+<br> 
+En cuanto al nivel de interés en la política, el gráfico evidencia que, gran parte de quienes presentan un apoyo medio a la democracia no están nada interesados en la política, representando el 53%. En cambio, existe una concentración similar entre los niveles Alto y Bajo de quienes declaran estar algo y poco interesados.
 
 ```{r}
 #| label: Gráfico interés en la política según nivel de apoyo a la democracia
@@ -487,7 +493,8 @@ demo_pol <- df %>%
 ggplotly(demo_pol, tooltip = "text")
 ```
 
-<br> En contraste a los gráficos previamente presentados, se puede observar que entre quienes presentan un alto nivel de apoyo a la democracia predomina la percepción de que el país está estancado (51,3%), seguida por la idea de que se encuentra en progreso (31,9%). Por el contrario, entre quienes presentan un bajo apoyo a la democracia, un 44,5% opina que el país está en retroceso. Finalmente, en el grupo con apoyo medio a la democracia también prevalece la percepción de estancamiento, con un 46,4%, seguida por el 42,5% que considera que el país está en retroceso.
+<br> 
+En contraste a los gráficos previamente presentados, se puede observar que entre quienes presentan un alto nivel de apoyo a la democracia predomina la percepción de que el país está estancado (51,3%), seguida por la idea de que se encuentra en progreso (31,9%). Por el contrario, entre quienes presentan un bajo apoyo a la democracia, un 44,5% opina que el país está en retroceso. Finalmente, en el grupo con apoyo medio a la democracia también prevalece la percepción de estancamiento, con un 46,4%, seguida por el 42,5% que considera que el país está en retroceso.
 
 ```{r}
 #| label: Gráfico percepción situación países según nivel de apoyo a la democracia
