@@ -216,17 +216,6 @@ df <- base %>%
       S1 == 97 ~ 2, #Sin identificación religiosa
       TRUE ~ 1 #Identificación religiosa
     )) %>%
-  #Etiquetas nuevas variables
-  set_value_labels(
-    RP16 = c(
-      "Izquierda" = 1,
-      "Centro"    = 2,
-      "Derecha"   = 3),
-    
-    RS1 = c(
-      "Identificación religiosa" = 1,
-      "Sin identificación religiosa" = 2)
-  ) %>% 
   filter(!is.na(P11STGBS))
 ```
 
