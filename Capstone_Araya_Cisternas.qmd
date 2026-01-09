@@ -166,71 +166,6 @@ Con el propósito de medir el nivel de apoyo a la democracia, la participación 
 -   REEDAD "Recodificación de edad en rangos" (16-25 = 1, 26-40 = 2, 41-60 = 3, 61 y más = 4)
 -   Sexo (Hombre = 1, Mujer = 2)
 
-```{r}
-#| label: Asignación de etiquetas a valores
-
-base <- base %>% 
-  set_value_labels(
-    P11STGBS = c(
-      "Alto" = 1,
-      "Medio" = 2,
-      "Bajo" = 3),
-    
-    P26ST = c(
-      "El voto puede cambiar las cosas" = 1,
-      "El voto no cambia las cosas" = 2),
-    
-    P38STGBS = c(
-      "Sí" = 1,
-      "No" = 2),
-    
-    P44ST = c(
-      "Manifestación o protesta" = 1,
-      "Redes sociales" = 2,
-      "Entre amigos" = 3,
-      "En familia" = 4,
-      "No suele hacerlo" = 5),
-    
-    P36STGBS = c(
-      "Muy interesado" = 1,
-      "Algo interesado" = 2,
-      "Poco interesado" = 3,
-      "Nada interesado" = 4),
-    
-    P2ST = c(
-      "Está progresando" = 1,
-      "Está estancado" = 2,
-      "Está en retroceso" = 3),
-    
-    P25ST = c(
-      "Sí" = 1,
-      "No" = 2),
-    
-    P17ST = c(
-      "Muy justa" = 1,
-      "Justa" = 2,
-      "Injusta" = 3,
-      "Muy injusta" = 4),
-    
-    S2 = c(
-      "Alta" = 1,
-      "Media alta" = 2,
-      "Media" = 3,
-      "Media baja" = 4,
-      "Baja" = 5),
-    
-    REEDAD = c(
-      "16–25 años" = 1,
-      "26–40 años" = 2,
-      "41–60 años" = 3,
-      "61 años o más" = 4),
-    
-    SEXO = c(
-      "Hombre" = 1,
-      "Mujer" = 2)
-    )
-```
-
 # Análisis exploratorio y descriptivo
 
 Previo al análisis exploratorio y descriptivo de los datos, es necesario realizar una serie de transformaciones a las variables por utilizar, con el propósito de facilitar el procesamiento e interpretación de los datos. 
@@ -293,6 +228,80 @@ df <- base %>%
       "Sin identificación religiosa" = 2)
   ) %>% 
   filter(!is.na(P11STGBS))
+```
+
+```{r}
+#| label: Asignación de etiquetas a valores
+
+df <- df %>% 
+  set_value_labels(
+    P11STGBS = c(
+      "Alto" = 1,
+      "Medio" = 2,
+      "Bajo" = 3),
+    
+    P26ST = c(
+      "El voto puede cambiar las cosas" = 1,
+      "El voto no cambia las cosas" = 2),
+    
+    P38STGBS = c(
+      "Sí" = 1,
+      "No" = 2),
+    
+    P44ST = c(
+      "Manifestación o protesta" = 1,
+      "Redes sociales" = 2,
+      "Entre amigos" = 3,
+      "En familia" = 4,
+      "No suele hacerlo" = 5),
+    
+    P36STGBS = c(
+      "Muy interesado" = 1,
+      "Algo interesado" = 2,
+      "Poco interesado" = 3,
+      "Nada interesado" = 4),
+    
+    P2ST = c(
+      "Está progresando" = 1,
+      "Está estancado" = 2,
+      "Está en retroceso" = 3),
+    
+    P25ST = c(
+      "Sí" = 1,
+      "No" = 2),
+    
+    P17ST = c(
+      "Muy justa" = 1,
+      "Justa" = 2,
+      "Injusta" = 3,
+      "Muy injusta" = 4),
+    
+    S2 = c(
+      "Alta" = 1,
+      "Media alta" = 2,
+      "Media" = 3,
+      "Media baja" = 4,
+      "Baja" = 5),
+    
+    REEDAD = c(
+      "16–25 años" = 1,
+      "26–40 años" = 2,
+      "41–60 años" = 3,
+      "61 años o más" = 4),
+    
+    SEXO = c(
+      "Hombre" = 1,
+      "Mujer" = 2),
+    
+     RP16 = c(
+      "Izquierda" = 1,
+      "Centro"    = 2,
+      "Derecha"   = 3),
+    
+    RS1 = c(
+      "Identificación religiosa" = 1,
+      "Sin identificación religiosa" = 2)
+    )
 ```
 
 ## Distribución de variables
